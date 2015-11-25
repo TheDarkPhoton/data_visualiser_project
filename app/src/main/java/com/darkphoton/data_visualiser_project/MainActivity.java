@@ -1,16 +1,38 @@
 package com.darkphoton.data_visualiser_project;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class MainActivity extends AppCompatActivity {
+    private TextView txtData;
+
+    private Job jsonJob = new Job() {
+        @Override
+        public void run(JSONObject json) throws JSONException {
+            txtData.setText(json.toString());
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        txtData = (TextView)findViewById(R.id.txtData);
+        JSONDownloader d = new JSONDownloader(this, jsonJob);
+        d.execute("http://www.inf.kcl.ac.uk/staff/andrew/rooms/somerooms.json");
     }
 
     @Override
