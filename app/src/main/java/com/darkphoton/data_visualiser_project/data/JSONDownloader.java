@@ -1,4 +1,4 @@
-package com.darkphoton.data_visualiser_project;
+package com.darkphoton.data_visualiser_project.data;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -12,19 +12,16 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.net.URL;
+import java.util.ArrayList;
 
-/**
- * Created by darkphoton on 25/11/15.
- */
 public class JSONDownloader extends AsyncTask<String, String, Void> {
     private ProgressDialog _progressDialog;
-    private JSONObject jsonData;
-    private String _result;
-    private Job _job;
+    private ArrayList<JSONArray> _results;
+    private DataJob _job;
 
-    JSONDownloader(AppCompatActivity context, Job job){
+    public JSONDownloader(AppCompatActivity context, DataJob job){
         _progressDialog = new ProgressDialog(context);
-        _result = "";
+        _results = new ArrayList<>();
         _job = job;
     }
 
@@ -42,22 +39,35 @@ public class JSONDownloader extends AsyncTask<String, String, Void> {
     @Override
     protected Void doInBackground(String... params) {
         try {
-            StringBuilder stringBuilder = new StringBuilder();
-            URL data = new URL(params[0]);
-            BufferedInputStream bis = new BufferedInputStream(data.openStream());
+            JSONArray json = null;
+            do {
+                String path;
+                if (json == null)
+                    path = params[0] + "&page=1";
+                else
+                    path = params[0] + "&page=" + (json.getJSONObject(0).getInt("page") + 1);
 
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while((bytesRead = bis.read(buffer)) > 0) {
-                String text = new String(buffer, 0, bytesRead);
-                stringBuilder.append(text);
-            }
-            bis.close();
+                StringBuilder stringBuilder = new StringBuilder();
+                URL data = new URL(path);
+                BufferedInputStream bis = new BufferedInputStream(data.openStream());
 
-            _result = stringBuilder.toString();
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while((bytesRead = bis.read(buffer)) > 0) {
+                    String text = new String(buffer, 0, bytesRead);
+                    stringBuilder.append(text);
+                }
+                bis.close();
+
+                json = new JSONArray(stringBuilder.toString());
+                _results.add(json);
+            } while (json.getJSONObject(0).getInt("page") < json.getJSONObject(0).getInt("pages"));
+
         } catch (java.io.IOException e) {
             Log.e("URLException", "Error: " + e.toString());
             _progressDialog.dismiss();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
         return null;
@@ -66,7 +76,7 @@ public class JSONDownloader extends AsyncTask<String, String, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         try {
-            _job.run(new JSONObject(_result));
+            _job.run(_results);
         } catch (JSONException e) {
             e.printStackTrace();
         }
