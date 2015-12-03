@@ -4,50 +4,60 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Country {
     private String _id;
     private String _name;
-    private ArrayList<Indicator> _indicators = new ArrayList<>();
+    private HashMap<String, Indicator> _indicators = new HashMap<>();
 
     public Country(String id, String name) {
         _id = id;
         _name = name;
     }
 
+    public Country(JSONObject data_unit) throws JSONException {
+        JSONObject jsonCountry = data_unit.getJSONObject("country");
+
+        _id = jsonCountry.getString("id");
+        _name = jsonCountry.getString("value");
+
+        Indicator indicator = new Indicator(data_unit);
+        _indicators.put(indicator.getId(), indicator);
+    }
+
     public void addIndicator(Indicator indicator) {
-        _indicators.add(indicator);
+        _indicators.put(indicator.getId(), indicator);
     }
 
-    public void addIndicator(JSONObject data_unit) throws JSONException {
-        JSONObject jsonIndicator = data_unit.getJSONObject("indicator");
-        Indicator indicator = new Indicator(jsonIndicator.getString("id"), jsonIndicator.getString("value"));
 
-        int index = _indicators.indexOf(indicator);
+    public void updateIndicators(JSONObject data_unit) throws JSONException {
+        Indicator new_indicator = new Indicator(data_unit);
 
-        if (index == -1){
-            _indicators.add(indicator);
-
-            Data data = new Data(data_unit.getString("date"), data_unit.getString("decimal"), data_unit.getString("value"));
-            indicator.addData(data);
-        } else {
-            _indicators.get(index).addData(data_unit);
-        }
+        Indicator old_indicator = _indicators.get(new_indicator.getId());
+        if (old_indicator == null)
+            _indicators.put(new_indicator.getId(), new_indicator);
+        else
+            old_indicator.updateData(data_unit);
     }
 
-    public void updateIndicators(ArrayList<Indicator> indicators) {
-        for (Indicator ind: indicators) {
-            int i = _indicators.indexOf(ind);
+    public void updateIndicators(HashMap<String, Indicator> indicators) {
+        for (Indicator new_indicator : indicators.values()) {
+            Indicator old_indicator = _indicators.get(new_indicator.getId());
 
-            if (i == -1)
-                _indicators.add(ind);
+            if (old_indicator == null)
+                _indicators.put(new_indicator.getId(), new_indicator);
             else
-                _indicators.get(i).updateData(ind.getData());
+                old_indicator.updateData(new_indicator.getData());
         }
     }
 
-    public ArrayList<Indicator> getIndicators(){
+    public HashMap<String, Indicator> getIndicators(){
         return _indicators;
+    }
+
+    public String getId(){
+        return _id;
     }
 
     public String getName(){

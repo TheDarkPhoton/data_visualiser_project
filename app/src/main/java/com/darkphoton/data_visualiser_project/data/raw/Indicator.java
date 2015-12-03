@@ -4,45 +4,53 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Indicator {
     private String _id;
     private String _name;
-    private ArrayList<Data> _data = new ArrayList<>();
+    private HashMap<String, Data> _data = new HashMap<>();
 
     public Indicator(String id, String name){
         _id = id;
         _name = name;
     }
 
+    public Indicator(JSONObject data_unit) throws JSONException {
+        JSONObject jsonIndicator = data_unit.getJSONObject("indicator");
+
+        _id = jsonIndicator.getString("id");
+        _name = jsonIndicator.getString("value");
+
+        Data data = new Data(data_unit);
+        _data.put(data.getDate(), data);
+    }
+
     public void addData(Data data){
-        _data.add(data);
+        _data.put(data.getDate(), data);
     }
 
-    public void addData(JSONObject data_unit) throws JSONException {
-        Data data = new Data(data_unit.getString("date"), data_unit.getString("decimal"), data_unit.getString("value"));
+    public void updateData(JSONObject data_unit) throws JSONException {
 
-        int index = _data.indexOf(data);
-
-        if (index >= 0)
-            _data.remove(index);
-
-        _data.add(data);
     }
 
-    public void updateData(ArrayList<Data> data){
-        for (Data d : data) {
-            int i = _data.indexOf(d);
+    public void updateData(HashMap<String, Data> data){
+        for (Data new_data : data.values()) {
+            Data old_data = _data.get(new_data.getDate());
 
-            if (i >= 0)
-                _data.remove(i);
-
-            _data.add(d);
+            if (old_data == null)
+                _data.put(new_data.getDate(), new_data);
+            else
+                old_data.updateData(new_data);
         }
     }
 
-    public ArrayList<Data> getData(){
+    public HashMap<String, Data> getData(){
         return _data;
+    }
+
+    public String getId(){
+        return _id;
     }
 
     public String getName(){
