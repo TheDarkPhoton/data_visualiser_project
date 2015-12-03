@@ -16,18 +16,20 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private JSONDownloader d;
     private TextView txtData;
-    private DataCache dataCache;
+    private DataCache dataCache = new DataCache();
+
     private DataJob jsonJob = new DataJob() {
         @Override
-        public void run(ArrayList<JSONArray> jsons) throws JSONException {
-            dataCache = new DataCache();
-            for (JSONArray json : jsons) {
-                dataCache.updateDataCache(new DataCache(json.getJSONArray(1)).getCountries());
+        public void run(ArrayList<JSONArray> jsonArrays) throws JSONException {
+            for (JSONArray a : jsonArrays) {
+                JSONArray indicators = a.getJSONArray(1);
+                for (int i = 0; i < indicators.length(); i++) {
+                    dataCache.updateDataCache(indicators.getJSONObject(i));
+                }
             }
 
-            txtData.setText(dataCache.getCountries().toString());
+            txtData.setText(dataCache.toString());
         }
     };
 
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         txtData = (TextView)findViewById(R.id.txtData);
-        d = new JSONDownloader(this, jsonJob);
+        JSONDownloader d = new JSONDownloader(this, jsonJob);
         d.execute("http://api.worldbank.org/countries/indicators/5.04.01.02.impexp?per_page=1000&date=2010:2015&format=json");
     }
 
