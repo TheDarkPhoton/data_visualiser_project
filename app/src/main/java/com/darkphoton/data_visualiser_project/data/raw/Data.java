@@ -49,11 +49,12 @@ public class Data {
 
     @Override
     public String toString() {
-        return _date;
+        return "{date[" + _date + "], decimal[" + _decimal + "], value[" + _value + "]}";
     }
 
     @Override
     public boolean equals(Object o) {
-        return _date.equals(o.toString());
+        Data d = (Data) o;
+        return _date.equals(d.getDate()) && _decimal.equals(d.getDecimal()) && _value == d.getValue();
     }
 }

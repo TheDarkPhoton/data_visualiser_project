@@ -66,11 +66,12 @@ public class Country {
 
     @Override
     public String toString() {
-        return _id;
+        return "{id[" + _id + "], name[" + _name + "]}";
     }
 
     @Override
     public boolean equals(Object o) {
-        return _id.equals(o.toString());
+        Country c = (Country) o;
+        return _id.equals(c.getId()) && _name.equals(c.getName()) && _indicators.equals(c.getIndicators());
     }
 }

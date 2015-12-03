@@ -12,29 +12,6 @@ public class DataCache {
 
     public DataCache(){}
 
-//    public DataCache(JSONArray indicators) throws JSONException {
-//        for (int i = 0; i < indicators.length(); ++i) {
-//            JSONObject data_unit = indicators.getJSONObject(i);
-//
-//            JSONObject jsonCountry = data_unit.getJSONObject("country");
-//            Country country = new Country(jsonCountry.getString("id"), jsonCountry.getString("value"));
-//            int index = _countries.indexOf(country);
-//
-//            if (index == -1) {
-//                _countries.add(country);
-//
-//                JSONObject jsonIndicator = data_unit.getJSONObject("indicator");
-//                Indicator indicator = new Indicator(jsonIndicator.getString("id"), jsonIndicator.getString("value"));
-//                country.addIndicator(indicator);
-//
-//                Data data = new Data(data_unit.getString("date"), data_unit.getString("decimal"), data_unit.getString("value"));
-//                indicator.addData(data);
-//            }
-//            else
-//                _countries.get(index).addIndicator(data_unit);
-//        }
-//    }
-
     public void updateDataCache(JSONObject data_unit) throws JSONException {
         Country new_country = new Country(data_unit);
 
@@ -57,5 +34,31 @@ public class DataCache {
 
     public HashMap<String, Country> getCountries(){
         return _countries;
+    }
+
+    @Override
+    public String toString() {
+        String output = "";
+
+        for (Country c : _countries.values()) {
+            output += "id: " + c.getId() + "\n";
+            output += "name: " + c.getName() + "\n";
+
+            for (Indicator i : c.getIndicators().values()) {
+                output += "    id: " + i.getId() + "\n";
+                output += "    name: " + i.getName() + "\n";
+
+                for (Data d : i.getData().values()) {
+                    output += "        date: " + d.getDate() + "\n";
+                    output += "        decimal: " + d.getDecimal() + "\n";
+                    output += "        value: " + d.getValue() + "\n";
+                }
+                output += "\n";
+            }
+            output += "\n";
+        }
+        output += "\n";
+
+        return output;
     }
 }

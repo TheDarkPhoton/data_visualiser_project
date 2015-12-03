@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            txtData.setText(dataCache.getCountries().toString());
+            txtData.setText(dataCache.toString());
         }
     };
 

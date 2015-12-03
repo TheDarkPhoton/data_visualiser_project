@@ -59,11 +59,12 @@ public class Indicator {
 
     @Override
     public String toString() {
-        return _id;
+        return "{id[" + _id + "], name[" + _name + "]}";
     }
 
     @Override
     public boolean equals(Object o) {
-        return _id.equals(o.toString());
+        Indicator i = (Indicator) o;
+        return _id.equals(i.getId()) && _name.equals(i.getName()) && _data.equals(i.getData());
     }
 }
