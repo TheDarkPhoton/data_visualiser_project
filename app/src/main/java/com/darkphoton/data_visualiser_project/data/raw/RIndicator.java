@@ -8,17 +8,17 @@ import java.util.HashMap;
 /**
  * Stores data on a particular world bank topic.
  */
-public class Indicator {
+public class RIndicator {
     private String _id;                                             //indicator id as defined by world data
     private String _name;                                           //indicator name as defined by world data
-    private HashMap<String, Data> _data = new HashMap<>();          //The list of data points in this indicator
+    private HashMap<String, RData> _data = new HashMap<>();          //The list of data points in this indicator
 
     /**
      * Defines default indicator.
      * @param id The id of the indicator as defined by the world bank.
      * @param name The name of the indicator as defined by the world bank.
      */
-    public Indicator(String id, String name){
+    public RIndicator(String id, String name){
         _id = id;
         _name = name;
     }
@@ -28,13 +28,13 @@ public class Indicator {
      * @param data_unit Json object that contains information on indicator and data.
      * @throws JSONException
      */
-    public Indicator(JSONObject data_unit) throws JSONException {
+    public RIndicator(JSONObject data_unit) throws JSONException {
         JSONObject jsonIndicator = data_unit.getJSONObject("indicator");
 
         _id = jsonIndicator.getString("id");
         _name = jsonIndicator.getString("value");
 
-        Data data = new Data(data_unit);
+        RData data = new RData(data_unit);
         _data.put(data.getDate(), data);
     }
 
@@ -44,9 +44,9 @@ public class Indicator {
      * @throws JSONException
      */
     public void updateData(JSONObject data_unit) throws JSONException {
-        Data new_data = new Data(data_unit);
+        RData new_data = new RData(data_unit);
 
-        Data old_data = _data.get(new_data.getDate());
+        RData old_data = _data.get(new_data.getDate());
         if (old_data == null)
             _data.put(new_data.getDate(), new_data);
         else
@@ -57,9 +57,9 @@ public class Indicator {
      * Updates data with the list of new data.
      * @param data is a hash map of data to be added or updated.
      */
-    public void updateData(HashMap<String, Data> data){
-        for (Data new_data : data.values()) {
-            Data old_data = _data.get(new_data.getDate());
+    public void updateData(HashMap<String, RData> data){
+        for (RData new_data : data.values()) {
+            RData old_data = _data.get(new_data.getDate());
 
             if (old_data == null)
                 _data.put(new_data.getDate(), new_data);
@@ -72,7 +72,7 @@ public class Indicator {
      * Gets the list of data.
      * @return Hash map of all data stored on this indicator.
      */
-    public HashMap<String, Data> getData(){
+    public HashMap<String, RData> getData(){
         return _data;
     }
 
@@ -99,7 +99,7 @@ public class Indicator {
 
     @Override
     public boolean equals(Object o) {
-        Indicator i = (Indicator) o;
+        RIndicator i = (RIndicator) o;
         return _id.equals(i.getId()) && _name.equals(i.getName()) && _data.equals(i.getData());
     }
 }

@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.darkphoton.data_visualiser_project.data.raw.DataCache;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,12 +18,11 @@ import java.util.ArrayList;
 
 public class JSONDownloader extends AsyncTask<String, String, Void> {
     private ProgressDialog _progressDialog;
-    private ArrayList<JSONArray> _results;
+    private DataCache _dataCache = new DataCache();
     private DataJob _job;
 
     public JSONDownloader(AppCompatActivity context, DataJob job){
         _progressDialog = new ProgressDialog(context);
-        _results = new ArrayList<>();
         _job = job;
     }
 
@@ -60,7 +61,11 @@ public class JSONDownloader extends AsyncTask<String, String, Void> {
                 bis.close();
 
                 json = new JSONArray(stringBuilder.toString());
-                _results.add(json);
+                JSONArray indicators = json.getJSONArray(1);
+                for (int i = 0; i < indicators.length(); i++) {
+                    _dataCache.updateDataCache(indicators.getJSONObject(i));
+                    publishProgress();
+                }
             } while (json.getJSONObject(0).getInt("page") < json.getJSONObject(0).getInt("pages"));
 
         } catch (java.io.IOException e) {
@@ -74,13 +79,13 @@ public class JSONDownloader extends AsyncTask<String, String, Void> {
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
-        try {
-            _job.run(_results);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    protected void onProgressUpdate(String... values) {
+        super.onProgressUpdate(values);
+    }
 
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        _job.run(_dataCache);
         _progressDialog.dismiss();
     }
 }

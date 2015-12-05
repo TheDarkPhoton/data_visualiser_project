@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Stores information on a single data point.
  */
-public class Data {
+public class RData {
     private String _date;                                           //Date of the data point
     private String _decimal;                                        //
     private double _value;                                          //Value of the data point
@@ -17,7 +17,7 @@ public class Data {
      * @param decimal
      * @param value Value of the data point.
      */
-    public Data(String date, String decimal, String value){
+    public RData(String date, String decimal, String value){
         _date = date;
         _decimal = decimal;
 
@@ -33,7 +33,7 @@ public class Data {
      * @param data_unit Json object with information of the data point, date, decimal and value.
      * @throws JSONException
      */
-    public Data(JSONObject data_unit) throws JSONException {
+    public RData(JSONObject data_unit) throws JSONException {
         _date = data_unit.getString("date");
         _decimal = data_unit.getString("decimal");
 
@@ -48,7 +48,7 @@ public class Data {
      * Updates the value of the data.
      * @param data An object with values to be used.
      */
-    public void updateData(Data data){
+    public void updateData(RData data){
         _decimal = data.getDecimal();
         _value = data.getValue();
     }
@@ -84,7 +84,7 @@ public class Data {
 
     @Override
     public boolean equals(Object o) {
-        Data d = (Data) o;
+        RData d = (RData) o;
         return _date.equals(d.getDate()) && _decimal.equals(d.getDecimal()) && _value == d.getValue();
     }
 }
