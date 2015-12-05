@@ -33,8 +33,6 @@
         private TextView xAxisLabel;
         private TextView yAxisLabel;
 
-        private Integer maxYValue;
-        private Integer minYValue;
         /**
          * ATTENTION: This was auto-generated to implement the App Indexing API.
          * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -78,6 +76,9 @@
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             layout.addView(lineChart, relativeParams);
 
+            //setting up the animation for the graph
+            lineChart.animateXY(7000, 500);
+
             //line chart customisation
             lineChart.setDescription("");
             lineChart.setNoDataTextDescription("No Data Provided");
@@ -103,6 +104,9 @@
             //adding the data to the line chart
             lineChart.setData(data);
 
+            //sets the data for current chart
+            setDataValues();
+
             //getting and customising the legend
             Legend legend = lineChart.getLegend();
             legend.setForm(LegendForm.LINE);
@@ -116,14 +120,12 @@
 
             YAxis yAxisl = lineChart.getAxisLeft();
             yAxisl.setTextColor(Color.BLACK);
-//                yAxisl.setAxisMinValue();
             yAxisl.setDrawAxisLine(true);
+            yAxisl.setStartAtZero(false);
 
             YAxis yAxisr = lineChart.getAxisRight();
             yAxisr.setEnabled(false);
 
-            //setting the values for the line graph
-            setDataValues();
 
         }
 
@@ -146,7 +148,8 @@
             //random method for getting some values
             for (int i = 0; i < 10; i++) {
 
-                yVals.add(new Entry(i*i, i));
+                yVals.add(new Entry((i*i), i));
+
             }
 
             // create the dataset and give it a type
@@ -172,6 +175,7 @@
             // set data
             lineChart.setData(data);
         }
+
 
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
