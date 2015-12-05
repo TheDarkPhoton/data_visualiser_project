@@ -19,8 +19,8 @@ public abstract class PIndicator {
     protected double _average = 0;
     protected double _normalized = 0;
 
-    public void normalize(double highest){
-        _normalized = _average / highest;
+    public void normalize(double highest, double lowest){
+        _normalized = (_average - lowest) / (highest - lowest);
     }
 
     public double getAverage(){

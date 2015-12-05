@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.darkphoton.data_visualiser_project.data.JSONDownloader;
 import com.darkphoton.data_visualiser_project.data.DataJob;
-import com.darkphoton.data_visualiser_project.data.processed.Processor;
-import com.darkphoton.data_visualiser_project.data.raw.DataCache;
+import com.darkphoton.data_visualiser_project.data.Processor;
+import com.darkphoton.data_visualiser_project.data.Cache;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,13 +21,13 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private TextView txtData;
-    private Processor data;
 
     private DataJob jsonJob = new DataJob() {
         @Override
-        public void run(DataCache cache) {
-            data = new Processor(cache);
+        public void run(Cache cache) {
+            Processor data = new Processor(cache);
             data.normalize();
+            data.reduceToTop(5);
             txtData.setText(data.toString());
         }
     };

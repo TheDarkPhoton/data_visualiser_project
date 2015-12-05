@@ -1,15 +1,31 @@
-package com.darkphoton.data_visualiser_project.data.raw;
+package com.darkphoton.data_visualiser_project.data;
+
+import com.darkphoton.data_visualiser_project.data.raw.RCountry;
+import com.darkphoton.data_visualiser_project.data.raw.RData;
+import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Stores the raw data from the world bank.
  */
-public class DataCache {
-    private HashMap<String, RCountry> _countries = new HashMap<>();                  //Stores indicator data for every country
+public class Cache {
+    private HashMap<String, RCountry> _countries = new HashMap<>();                  // Stores indicator data for every country
+    public final static String[] ignored = {                                         // The list of ignored areas (collections of countries)
+            "1W", "XD", "OE", "XS", "Z7", "XO",
+            "XP", "Z4", "XU", "EU", "XT", "XC",
+            "4E", "ZJ", "XR", "XN", "XJ", "ZQ",
+            "1A", "8S", "7E", "ZG", "ZF", "XQ",
+            "B8", "XL", "F1", "XE", "XM", "S1",
+            "S4", "S3", "LA", "S2"
+    };
 
     /**
      * Updates the data in the cache using the provided JSON object.
@@ -18,6 +34,8 @@ public class DataCache {
      */
     public void updateDataCache(JSONObject data_unit) throws JSONException {
         RCountry new_country = new RCountry(data_unit);
+        if (Arrays.asList(ignored).contains(new_country.getId()))
+            return;
 
         RCountry old_country = _countries.get(new_country.getId());
         if (old_country == null)

@@ -6,13 +6,13 @@ import com.darkphoton.data_visualiser_project.data.raw.RCountry;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PCountry {
     private HashMap<String, PIndicator> _indicators = new HashMap<>();
     private String _id;
     private String _name;
+    private double _value = 0;
 
     public PCountry(RCountry country) {
         _id = country.getId();
@@ -35,6 +35,19 @@ public class PCountry {
         }
     }
 
+    public void calculateValue(){
+        double total = 0;
+        int count = 0;
+        for (PIndicator indicator : _indicators.values()) {
+            if (indicator.getNormalizedAverage() > 0){
+                total += indicator.getNormalizedAverage();
+                ++count;
+            }
+        }
+
+        _value = (count == 0) ? 0 : total / count;
+    }
+
     public PIndicator getIndicator(String key){
         return _indicators.get(key);
     }
@@ -45,6 +58,10 @@ public class PCountry {
 
     public String getName() {
         return _name;
+    }
+
+    public double getValue(){
+        return _value;
     }
 
     public HashMap<String, PIndicator> getIndicators(){

@@ -6,19 +6,15 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.darkphoton.data_visualiser_project.data.raw.DataCache;
-
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.net.URL;
-import java.util.ArrayList;
 
 public class JSONDownloader extends AsyncTask<String, String, Void> {
     private ProgressDialog _progressDialog;
-    private DataCache _dataCache = new DataCache();
+    private Cache _dataCache = new Cache();
     private DataJob _job;
 
     public JSONDownloader(AppCompatActivity context, DataJob job){
@@ -64,7 +60,6 @@ public class JSONDownloader extends AsyncTask<String, String, Void> {
                 JSONArray indicators = json.getJSONArray(1);
                 for (int i = 0; i < indicators.length(); i++) {
                     _dataCache.updateDataCache(indicators.getJSONObject(i));
-                    publishProgress();
                 }
             } while (json.getJSONObject(0).getInt("page") < json.getJSONObject(0).getInt("pages"));
 
@@ -76,11 +71,6 @@ public class JSONDownloader extends AsyncTask<String, String, Void> {
         }
 
         return null;
-    }
-
-    @Override
-    protected void onProgressUpdate(String... values) {
-        super.onProgressUpdate(values);
     }
 
     @Override
