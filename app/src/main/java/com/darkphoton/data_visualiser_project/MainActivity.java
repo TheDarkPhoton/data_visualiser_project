@@ -21,6 +21,18 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private TextView txtData;
+    //http://api.worldbank.org/countries/indicators/NY.GDP.MKTP.CD?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.STA.ACSN?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.STA.ACSN.RU?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.STA.ACSN.UR?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.H2O.SAFE.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.H2O.SAFE.RU.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.H2O.SAFE.UR.ZS?date=2010:2015&format=json&per_page=10000
+
+    //http://api.worldbank.org/countries/indicators/EG.NSF.ACCS.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/EG.ELC.ACCS.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.ELC.SAFE.UR.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.ELC.SAFE.UR.ZS?date=2010:2015&format=json&per_page=10000
 
     private DataJob jsonJob = new DataJob() {
         @Override
@@ -39,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         txtData = (TextView)findViewById(R.id.txtData);
         JSONDownloader d = new JSONDownloader(this, jsonJob);
-        d.execute("http://api.worldbank.org/countries/indicators/NY.GDP.MKTP.CD?date=2010:2015&format=json&per_page=10000");
+        d.execute("http://api.worldbank.org/countries/indicators/EG.ELC.ACCS.RU.ZS?date=2010:2015&format=json&per_page=10000");
 
         /*Temporary test code, for everyone's benefit of understanding how the methods can be used.*/
         ArrayList testArraylist = new ArrayList();
@@ -88,9 +100,9 @@ public class MainActivity extends AppCompatActivity {
 
     /*This method is used for normalizing the percentages from the Education data indicators as all of
     * them are given in a percentage format. It takes an ArrayList of percentages given as Strings and
-    * returns a single percentage as a String. All but one have been given as "% of CountryGDP per Capita"
-    * except for "Government expenditure on education" which is given as "% of CountryGDP". While this could
-    * be converted to "% of CountryGDP per Capita" it seems somewhat redundant because the data indicators
+    * returns a single percentage as a String. All but one have been given as "% of GDP per Capita"
+    * except for "Government expenditure on education" which is given as "% of GDP". While this could
+    * be converted to "% of GDP per Capita" it seems somewhat redundant because the data indicators
      * range dramatically, from 23% to as much as 297%*/
     public static String normalizePercentages(ArrayList<String> inputArray){
         int sum = 0;
