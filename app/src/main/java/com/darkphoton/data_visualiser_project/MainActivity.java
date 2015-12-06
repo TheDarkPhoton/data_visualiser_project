@@ -49,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
     //http://api.worldbank.org/countries/indicators/EP.PMP.SGAS.CD?date=2010:2015&format=json&per_page=10000
     //http://api.worldbank.org/countries/indicators/EN.ATM.PM25.MC.M3?date=2010:2015&format=json&per_page=10000
     //http://api.worldbank.org/countries/indicators/EN.ATM.PM25.MC.ZS?date=2010:2015&format=json&per_page=10000
-
-    //http://api.worldbank.org/countries/indicators/SH.DTH.COMM.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/NY.GDP.PCAP.CD?date=2010:2015&format=json&per_page=10000
 
     private DataJob jsonJob = new DataJob() {
         @Override
@@ -69,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         txtData = (TextView)findViewById(R.id.txtData);
         JSONDownloader d = new JSONDownloader(this, jsonJob);
-        d.execute("http://api.worldbank.org/countries/indicators/EN.ATM.PM25.MC.ZS?date=2010:2015&format=json&per_page=10000");
+        d.execute("http://api.worldbank.org/countries/indicators/NY.GDP.PCAP.CD?date=2010:2015&format=json&per_page=10000");
 
         /*Temporary test code, for everyone's benefit of understanding how the methods can be used.*/
         ArrayList testArraylist = new ArrayList();
