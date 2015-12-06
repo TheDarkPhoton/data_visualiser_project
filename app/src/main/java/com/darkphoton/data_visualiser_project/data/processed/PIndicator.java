@@ -1,14 +1,27 @@
 package com.darkphoton.data_visualiser_project.data.processed;
 
 import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.CausesOfDeath;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.DieselPumpPrice;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.GINI;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.LongTermUnemploymentFemale;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.LongTermUnemploymentMale;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.PetrolPumpPrice;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.PollutionMeanAnnualExposure;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.PollutionWHOGuideline;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.TotalTaxRate;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.DepositInterestRate;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.EducationExpenditure;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.ElectricityAccess;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.ElectricityAccessRural;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.ElectricityAccessUrban;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.GDP;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.GDPPerCapita;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.GrossSavings;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.LegalRightsIndex;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.LiteracyRate;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.NonSolidFuelAccess;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.PollutionDensity;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.RailwayPassengersCarried;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.RenewableInternalFreshwater;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.SanitationFacilities;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.SanitationFacilitiesRural;
@@ -46,6 +59,19 @@ public abstract class PIndicator {
         map.put("SI.POV.GINI", GINI.class);
         map.put("NY.GNS.ICTR.CD", GrossSavings.class);
         map.put("FI.RES.TOTL.CD", TotalReserves.class);
+        map.put("FR.INR.DPST", DepositInterestRate.class);
+        map.put("IC.TAX.TOTL.CP.ZS", TotalTaxRate.class);
+        map.put("IC.LGL.CRED.XQ", LegalRightsIndex.class);
+        map.put("SL.UEM.LTRM.FE.ZS", LongTermUnemploymentFemale.class);
+        map.put("SL.UEM.LTRM.MA.ZS", LongTermUnemploymentMale.class);
+        map.put("SE.XPD.TOTL.GD.ZS", EducationExpenditure.class);
+        map.put("SE.ADT.LITR.ZS", LiteracyRate.class);
+        map.put("IS.RRS.PASG.KM", RailwayPassengersCarried.class);
+        map.put("EP.PMP.DESL.CD", DieselPumpPrice.class);
+        map.put("EP.PMP.SGAS.CD", PetrolPumpPrice.class);
+        map.put("EN.ATM.PM25.MC.M3", PollutionMeanAnnualExposure.class);
+        map.put("EN.ATM.PM25.MC.ZS", PollutionWHOGuideline.class);
+        map.put("NY.GDP.PCAP.CD", GDPPerCapita.class);
 
         indicatorClasses = Collections.unmodifiableMap(map);
     }

@@ -37,9 +37,19 @@ public class MainActivity extends AppCompatActivity {
     //http://api.worldbank.org/countries/indicators/SI.POV.GINI?date=2010:2015&format=json&per_page=10000
     //http://api.worldbank.org/countries/indicators/NY.GNS.ICTR.CD?date=2010:2015&format=json&per_page=10000
     //http://api.worldbank.org/countries/indicators/FI.RES.TOTL.CD?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/FR.INR.DPST?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/IC.TAX.TOTL.CP.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/IC.LGL.CRED.XQ?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SL.UEM.LTRM.FE.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SL.UEM.LTRM.MA.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SE.XPD.TOTL.GD.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SE.ADT.LITR.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/IS.RRS.PASG.KM?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/EP.PMP.DESL.CD?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/EP.PMP.SGAS.CD?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/EN.ATM.PM25.MC.M3?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/EN.ATM.PM25.MC.ZS?date=2010:2015&format=json&per_page=10000
 
-    //http://api.worldbank.org/countries/indicators/SH.DTH.COMM.ZS?date=2010:2015&format=json&per_page=10000
-    //http://api.worldbank.org/countries/indicators/SH.DTH.COMM.ZS?date=2010:2015&format=json&per_page=10000
     //http://api.worldbank.org/countries/indicators/SH.DTH.COMM.ZS?date=2010:2015&format=json&per_page=10000
 
     private DataJob jsonJob = new DataJob() {
@@ -59,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         txtData = (TextView)findViewById(R.id.txtData);
         JSONDownloader d = new JSONDownloader(this, jsonJob);
-        d.execute("http://api.worldbank.org/countries/indicators/FI.RES.TOTL.CD?date=2010:2015&format=json&per_page=10000");
+        d.execute("http://api.worldbank.org/countries/indicators/EN.ATM.PM25.MC.ZS?date=2010:2015&format=json&per_page=10000");
 
         /*Temporary test code, for everyone's benefit of understanding how the methods can be used.*/
         ArrayList testArraylist = new ArrayList();

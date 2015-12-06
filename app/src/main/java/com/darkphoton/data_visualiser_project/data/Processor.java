@@ -73,13 +73,15 @@ public class Processor {
         String output = "";
 
         for (PCountry country : _countries) {
-            output += country.getId() + "\n";
+//            output += country.getId() + "\n";
             output += country.getName() + "\n";
+            output += "    value: " + country.getValue() + "\n";
             for (PIndicator indicator : country.getIndicators().values()) {
                 output += "    " + indicator.getName() + ":\n";
                 output += "        average: " + nf.format(indicator.getAverage()) + "\n";
                 output += "        normalized: " + indicator.getNormalizedAverage() + "\n";
             }
+            output += "\n";
         }
 
         return output;
