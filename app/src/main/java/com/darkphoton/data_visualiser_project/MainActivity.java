@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.darkphoton.data_visualiser_project.data.JSONDownloader;
@@ -65,6 +67,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        String[] items = { "Test1", "Test2", "Test3" };
+        ArrayAdapter<String> arrayItems = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
+
+        ListView listView = (ListView) findViewById(R.id.side_list);
+        listView.setAdapter(arrayItems);
 
         txtData = (TextView)findViewById(R.id.txtData);
         JSONDownloader d = new JSONDownloader(this, jsonJob);

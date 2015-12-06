@@ -21,7 +21,7 @@
 
         </ScrollView>
 
-        <include layout="@layout/nav_drawer" />
+        <include layout="@layout/side_bar" />
 
     </android.support.v4.widget.DrawerLayout>
 </RelativeLayout>
