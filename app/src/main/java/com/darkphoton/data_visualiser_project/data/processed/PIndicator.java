@@ -1,16 +1,22 @@
 package com.darkphoton.data_visualiser_project.data.processed;
 
-import com.darkphoton.data_visualiser_project.data.processed.indicators.ElectricityAccess;
-import com.darkphoton.data_visualiser_project.data.processed.indicators.ElectricityAccessRural;
-import com.darkphoton.data_visualiser_project.data.processed.indicators.ElectricityAccessUrban;
-import com.darkphoton.data_visualiser_project.data.processed.indicators.GDP;
-import com.darkphoton.data_visualiser_project.data.processed.indicators.NonSolidFuelAccess;
-import com.darkphoton.data_visualiser_project.data.processed.indicators.SanitationFacilities;
-import com.darkphoton.data_visualiser_project.data.processed.indicators.SanitationFacilitiesRural;
-import com.darkphoton.data_visualiser_project.data.processed.indicators.SanitationFacilitiesUrban;
-import com.darkphoton.data_visualiser_project.data.processed.indicators.WaterSources;
-import com.darkphoton.data_visualiser_project.data.processed.indicators.WaterSourcesRural;
-import com.darkphoton.data_visualiser_project.data.processed.indicators.WaterSourcesUrban;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.CausesOfDeath;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.GINI;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.ElectricityAccess;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.ElectricityAccessRural;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.ElectricityAccessUrban;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.GDP;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.GrossSavings;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.NonSolidFuelAccess;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.PollutionDensity;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.RenewableInternalFreshwater;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.SanitationFacilities;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.SanitationFacilitiesRural;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.SanitationFacilitiesUrban;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.TotalReserves;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.WaterSources;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.WaterSourcesRural;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.positive.WaterSourcesUrban;
 import com.darkphoton.data_visualiser_project.data.raw.RData;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
@@ -34,7 +40,12 @@ public abstract class PIndicator {
         map.put("EG.ELC.ACCS.ZS", ElectricityAccess.class);
         map.put("EG.ELC.ACCS.RU.ZS", ElectricityAccessRural.class);
         map.put("EG.ELC.ACCS.UR.ZS", ElectricityAccessUrban.class);
-
+        map.put("ER.H2O.INTR.PC", RenewableInternalFreshwater.class);
+        map.put("EN.POP.DNST", PollutionDensity.class);
+        map.put("SH.DTH.COMM.ZS", CausesOfDeath.class);
+        map.put("SI.POV.GINI", GINI.class);
+        map.put("NY.GNS.ICTR.CD", GrossSavings.class);
+        map.put("FI.RES.TOTL.CD", TotalReserves.class);
 
         indicatorClasses = Collections.unmodifiableMap(map);
     }
@@ -53,12 +64,7 @@ public abstract class PIndicator {
             }
         }
 
-        if (count > 0)
-            _average = total / count;
-    }
-
-    public void normalize(double highest, double lowest){
-        _normalized = (_average - lowest) / (highest - lowest);
+        _average = total / count;
     }
 
     public double getAverage(){
@@ -69,6 +75,7 @@ public abstract class PIndicator {
         return _normalized;
     }
 
+    public abstract void normalize(double highest, double lowest);
     public abstract String getId();
     public abstract String getName();
     public abstract String getTitle();

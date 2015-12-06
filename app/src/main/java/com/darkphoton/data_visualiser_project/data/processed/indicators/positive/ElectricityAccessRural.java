@@ -1,9 +1,9 @@
-package com.darkphoton.data_visualiser_project.data.processed.indicators;
+package com.darkphoton.data_visualiser_project.data.processed.indicators.positive;
 
-import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.PositiveIndicator;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
-public class ElectricityAccessRural extends PIndicator {
+public class ElectricityAccessRural extends PositiveIndicator {
     public final static String id = "EG.ELC.ACCS.RU.ZS";
     public final static String name = "Electricity Access - Rural";
     public final static String title = "Electricity Access - Rural (% of population)";

@@ -35,7 +35,9 @@ public class RCountry {
         _name = jsonCountry.getString("value");
 
         RIndicator indicator = new RIndicator(data_unit);
-        _indicators.put(indicator.getId(), indicator);
+
+        if (!indicator.isEmpty())
+            _indicators.put(indicator.getId(), indicator);
     }
 
     /**
@@ -47,10 +49,12 @@ public class RCountry {
         RIndicator new_indicator = new RIndicator(data_unit);
 
         RIndicator old_indicator = _indicators.get(new_indicator.getId());
-        if (old_indicator == null)
-            _indicators.put(new_indicator.getId(), new_indicator);
-        else
-            old_indicator.updateData(data_unit);
+        if (old_indicator == null) {
+            if (!new_indicator.isEmpty())
+                _indicators.put(new_indicator.getId(), new_indicator);
+        } else {
+            old_indicator.updateDataSet(data_unit);
+        }
     }
 
     /**
@@ -61,10 +65,12 @@ public class RCountry {
         for (RIndicator new_indicator : indicators.values()) {
             RIndicator old_indicator = _indicators.get(new_indicator.getId());
 
-            if (old_indicator == null)
-                _indicators.put(new_indicator.getId(), new_indicator);
-            else
-                old_indicator.updateData(new_indicator.getData());
+            if (old_indicator == null){
+                if (!new_indicator.isEmpty())
+                    _indicators.put(new_indicator.getId(), new_indicator);
+            } else {
+                old_indicator.updateDataSet(new_indicator.getData());
+            }
         }
     }
 
@@ -74,6 +80,14 @@ public class RCountry {
      */
     public HashMap<String, RIndicator> getIndicators(){
         return _indicators;
+    }
+
+    /**
+     * Determines if a country has any indicators.
+     * @return true if a country has at least one indicator.
+     */
+    public boolean isEmpty(){
+        return _indicators.isEmpty();
     }
 
     /**

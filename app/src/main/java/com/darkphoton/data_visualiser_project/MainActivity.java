@@ -28,11 +28,19 @@ public class MainActivity extends AppCompatActivity {
     //http://api.worldbank.org/countries/indicators/SH.H2O.SAFE.ZS?date=2010:2015&format=json&per_page=10000
     //http://api.worldbank.org/countries/indicators/SH.H2O.SAFE.RU.ZS?date=2010:2015&format=json&per_page=10000
     //http://api.worldbank.org/countries/indicators/SH.H2O.SAFE.UR.ZS?date=2010:2015&format=json&per_page=10000
-
     //http://api.worldbank.org/countries/indicators/EG.NSF.ACCS.ZS?date=2010:2015&format=json&per_page=10000
     //http://api.worldbank.org/countries/indicators/EG.ELC.ACCS.ZS?date=2010:2015&format=json&per_page=10000
     //http://api.worldbank.org/countries/indicators/SH.ELC.SAFE.UR.ZS?date=2010:2015&format=json&per_page=10000
-    //http://api.worldbank.org/countries/indicators/SH.ELC.SAFE.UR.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.ELC.SAFE.RU.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/EN.POP.DNST?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.DTH.COMM.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SI.POV.GINI?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/NY.GNS.ICTR.CD?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/FI.RES.TOTL.CD?date=2010:2015&format=json&per_page=10000
+
+    //http://api.worldbank.org/countries/indicators/SH.DTH.COMM.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.DTH.COMM.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.DTH.COMM.ZS?date=2010:2015&format=json&per_page=10000
 
     private DataJob jsonJob = new DataJob() {
         @Override
@@ -51,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         txtData = (TextView)findViewById(R.id.txtData);
         JSONDownloader d = new JSONDownloader(this, jsonJob);
-        d.execute("http://api.worldbank.org/countries/indicators/EG.ELC.ACCS.RU.ZS?date=2010:2015&format=json&per_page=10000");
+        d.execute("http://api.worldbank.org/countries/indicators/FI.RES.TOTL.CD?date=2010:2015&format=json&per_page=10000");
 
         /*Temporary test code, for everyone's benefit of understanding how the methods can be used.*/
         ArrayList testArraylist = new ArrayList();

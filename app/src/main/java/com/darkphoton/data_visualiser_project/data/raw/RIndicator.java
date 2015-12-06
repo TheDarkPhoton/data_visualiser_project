@@ -35,7 +35,23 @@ public class RIndicator {
         _name = jsonIndicator.getString("value");
 
         RData data = new RData(data_unit);
-        _data.put(data.getDate(), data);
+
+        if (data.isValid())
+            _data.put(data.getDate(), data);
+    }
+
+    /**
+     * Updates or adds the raw data unit provided.
+     * @param new_data The data to be added or updated.
+     */
+    private void updateData(RData new_data){
+        RData old_data = _data.get(new_data.getDate());
+        if (old_data == null){
+            if (new_data.isValid())
+                _data.put(new_data.getDate(), new_data);
+        } else {
+            old_data.updateData(new_data);
+        }
     }
 
     /**
@@ -43,28 +59,17 @@ public class RIndicator {
      * @param data_unit is a json object with data.
      * @throws JSONException
      */
-    public void updateData(JSONObject data_unit) throws JSONException {
-        RData new_data = new RData(data_unit);
-
-        RData old_data = _data.get(new_data.getDate());
-        if (old_data == null)
-            _data.put(new_data.getDate(), new_data);
-        else
-            old_data.updateData(new_data);
+    public void updateDataSet(JSONObject data_unit) throws JSONException {
+        updateData(new RData(data_unit));
     }
 
     /**
      * Updates data with the list of new data.
      * @param data is a hash map of data to be added or updated.
      */
-    public void updateData(HashMap<String, RData> data){
+    public void updateDataSet(HashMap<String, RData> data){
         for (RData new_data : data.values()) {
-            RData old_data = _data.get(new_data.getDate());
-
-            if (old_data == null)
-                _data.put(new_data.getDate(), new_data);
-            else
-                old_data.updateData(new_data);
+            updateData(new_data);
         }
     }
 
@@ -74,6 +79,14 @@ public class RIndicator {
      */
     public HashMap<String, RData> getData(){
         return _data;
+    }
+
+    /**
+     * Determines whether indicator has any data units.
+     * @return true if there is at least one data unit on this indicator.
+     */
+    public boolean isEmpty(){
+        return _data.isEmpty();
     }
 
     /**

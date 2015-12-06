@@ -38,10 +38,12 @@ public class Cache {
             return;
 
         RCountry old_country = _countries.get(new_country.getId());
-        if (old_country == null)
-            _countries.put(new_country.getId(), new_country);
-        else
+        if (old_country == null) {
+            if (!new_country.isEmpty())
+                _countries.put(new_country.getId(), new_country);
+        } else {
             old_country.updateIndicators(data_unit);
+        }
     }
 
     /**
@@ -51,10 +53,12 @@ public class Cache {
     public void updateDataCache(HashMap<String, RCountry> countries){
         for (RCountry new_country : countries.values()) {
             RCountry old_country = _countries.get(new_country.getId());
-            if (old_country == null)
-                _countries.put(new_country.getId(), new_country);
-            else
+            if (old_country == null) {
+                if (!new_country.isEmpty())
+                    _countries.put(new_country.getId(), new_country);
+            } else {
                 old_country.updateIndicators(new_country.getIndicators());
+            }
         }
     }
 

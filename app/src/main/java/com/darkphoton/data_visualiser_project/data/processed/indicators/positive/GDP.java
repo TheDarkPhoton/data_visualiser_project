@@ -1,13 +1,9 @@
-package com.darkphoton.data_visualiser_project.data.processed.indicators;
+package com.darkphoton.data_visualiser_project.data.processed.indicators.positive;
 
-import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
+import com.darkphoton.data_visualiser_project.data.processed.indicators.PositiveIndicator;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
-import com.darkphoton.data_visualiser_project.data.raw.RData;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-
-public class GDP extends PIndicator {
+public class GDP extends PositiveIndicator {
     public final static String id = "NY.GDP.MKTP.CD";
     public final static String name = "GDP";
     public final static String title = "Gross Domestic Product (in US$)";

@@ -9,7 +9,8 @@ import org.json.JSONObject;
 public class RData {
     private String _date;                                           //Date of the data point
     private String _decimal;                                        //
-    private double _value;                                          //Value of the data point
+    private double _value = 0;                                      //Value of the data point
+    private boolean _valid = true;                                  //Used to check if value is valid
 
     /**
      * Defines default data object.
@@ -20,12 +21,7 @@ public class RData {
     public RData(String date, String decimal, String value){
         _date = date;
         _decimal = decimal;
-
-        try {
-            _value = Double.parseDouble(value);
-        } catch (NumberFormatException e) {
-            _value = 0;
-        }
+        setValue(value);
     }
 
     /**
@@ -36,11 +32,18 @@ public class RData {
     public RData(JSONObject data_unit) throws JSONException {
         _date = data_unit.getString("date");
         _decimal = data_unit.getString("decimal");
+        setValue(data_unit.getString("value"));
+    }
 
+    /**
+     * Sets the value of data unit
+     * @param value Value to be used in a form of a string.
+     */
+    private void setValue(String value){
         try {
-            _value = Double.parseDouble(data_unit.getString("value"));
+            _value = Double.parseDouble(value);
         } catch (NumberFormatException e) {
-            _value = 0;
+            _valid = false;
         }
     }
 
@@ -75,6 +78,14 @@ public class RData {
      */
     public double getValue(){
         return _value;
+    }
+
+    /**
+     * Determines if data unit is valid or not.
+     * @return true if the value is valid, false if it isn't.
+     */
+    public boolean isValid(){
+        return _valid;
     }
 
     @Override
