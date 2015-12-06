@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
@@ -34,7 +35,7 @@ public class PieChart_Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_pie_chart , container , false);
 
         //initialing arrays
-        valuesForCountries = new float[]{ 60, 65, 72 , 76 , 82};
+        valuesForCountries = new float[]{ 40, 65, 72 , 76 , 82};
         topCountries = new String[] {"China" , "France" , "Japan" , "UK" , "USA" };
 
         // check if view is created to prevent NullPointerException
@@ -46,9 +47,9 @@ public class PieChart_Fragment extends Fragment {
 
             //look of piechart
             pieChart.setDrawHoleEnabled(true);
-            pieChart.setHoleRadius(15f);
+            pieChart.setHoleRadius(35f);
             pieChart.setHoleColorTransparent(true);
-            pieChart.setTransparentCircleRadius(20f);
+            pieChart.setTransparentCircleRadius(37f);
 
             addData();
         }
@@ -83,14 +84,15 @@ public class PieChart_Fragment extends Fragment {
         // creating PieDataset to hold the values
         PieDataSet dataSet = new PieDataSet(avarageValueTopCountiresValue , "Countries");
         dataSet.setSelectionShift(5f);
-        dataSet.setSliceSpace(4f);
+        dataSet.setSliceSpace(0f);
         dataSet.setColors(colors);
 
         // creating pieData to disaply the final piechart
         PieData data = new PieData(avarageTopCountriesName , dataSet);
         data.setValueTextSize(15f);
         pieChart.setData(data);
-
+        pieChart.animateX( 1500 , Easing.EasingOption.EaseInCirc);
+       // pieChart.spin( 1000,0,-360f, Easing.EasingOption.EaseInElastic);
     }
 
 }
