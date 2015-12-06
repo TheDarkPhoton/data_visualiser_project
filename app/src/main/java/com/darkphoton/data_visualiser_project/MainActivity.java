@@ -1,7 +1,6 @@
 package com.darkphoton.data_visualiser_project;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,10 +9,8 @@ import android.widget.TextView;
 
 import com.darkphoton.data_visualiser_project.data.JSONDownloader;
 import com.darkphoton.data_visualiser_project.data.DataJob;
-import com.darkphoton.data_visualiser_project.data.raw.DataCache;
-
-import org.json.JSONArray;
-import org.json.JSONException;
+import com.darkphoton.data_visualiser_project.data.Processor;
+import com.darkphoton.data_visualiser_project.data.Cache;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -24,19 +21,44 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private TextView txtData;
-    private DataCache dataCache = new DataCache();
+    //http://api.worldbank.org/countries/indicators/NY.GDP.MKTP.CD?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.STA.ACSN?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.STA.ACSN.RU?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.STA.ACSN.UR?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.H2O.SAFE.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.H2O.SAFE.RU.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.H2O.SAFE.UR.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/EG.NSF.ACCS.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/EG.ELC.ACCS.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.ELC.SAFE.UR.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.ELC.SAFE.RU.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/EN.POP.DNST?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SH.DTH.COMM.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SI.POV.GINI?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/NY.GNS.ICTR.CD?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/FI.RES.TOTL.CD?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/FR.INR.DPST?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/IC.TAX.TOTL.CP.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/IC.LGL.CRED.XQ?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SL.UEM.LTRM.FE.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SL.UEM.LTRM.MA.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SE.XPD.TOTL.GD.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/SE.ADT.LITR.ZS?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/IS.RRS.PASG.KM?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/EP.PMP.DESL.CD?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/EP.PMP.SGAS.CD?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/EN.ATM.PM25.MC.M3?date=2010:2015&format=json&per_page=10000
+    //http://api.worldbank.org/countries/indicators/EN.ATM.PM25.MC.ZS?date=2010:2015&format=json&per_page=10000
+
+    //http://api.worldbank.org/countries/indicators/SH.DTH.COMM.ZS?date=2010:2015&format=json&per_page=10000
 
     private DataJob jsonJob = new DataJob() {
         @Override
-        public void run(ArrayList<JSONArray> jsonArrays) throws JSONException {
-            for (JSONArray a : jsonArrays) {
-                JSONArray indicators = a.getJSONArray(1);
-                for (int i = 0; i < indicators.length(); i++) {
-                    dataCache.updateDataCache(indicators.getJSONObject(i));
-                }
-            }
-
-            txtData.setText(dataCache.toString());
+        public void run(Cache cache) {
+            Processor data = new Processor(cache);
+            data.normalize();
+            data.reduceToTop(5);
+            txtData.setText(data.toString());
         }
     };
 
@@ -47,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         txtData = (TextView)findViewById(R.id.txtData);
         JSONDownloader d = new JSONDownloader(this, jsonJob);
-        d.execute("http://api.worldbank.org/countries/indicators/5.04.01.02.impexp?per_page=1000&date=2010:2015&format=json");
+        d.execute("http://api.worldbank.org/countries/indicators/EN.ATM.PM25.MC.ZS?date=2010:2015&format=json&per_page=10000");
 
         /*Temporary test code, for everyone's benefit of understanding how the methods can be used.*/
         ArrayList testArraylist = new ArrayList();
