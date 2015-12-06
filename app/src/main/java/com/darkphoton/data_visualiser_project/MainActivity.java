@@ -13,6 +13,7 @@ import com.darkphoton.data_visualiser_project.data.JSONDownloader;
 import com.darkphoton.data_visualiser_project.data.DataJob;
 import com.darkphoton.data_visualiser_project.data.Processor;
 import com.darkphoton.data_visualiser_project.data.Cache;
+import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private TextView txtData;
@@ -68,11 +70,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String[] items = { "Test1", "Test2", "Test3" };
-        ArrayAdapter<String> arrayItems = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
+        List<Class> set = new ArrayList<>(PIndicator.indicatorClasses.values());
+        SideBarAdapter indicatorAdapter = new SideBarAdapter(this, android.R.layout.simple_list_item_1, set);
 
         ListView listView = (ListView) findViewById(R.id.side_list);
-        listView.setAdapter(arrayItems);
+        listView.setAdapter(indicatorAdapter);
 
         txtData = (TextView)findViewById(R.id.txtData);
         JSONDownloader d = new JSONDownloader(this, jsonJob);
