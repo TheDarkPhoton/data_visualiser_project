@@ -8,13 +8,16 @@ import android.widget.CheckBox;
  */
 public class menuOnClickListener implements View.OnClickListener {
     CheckBox checkBox;
-    public menuOnClickListener(CheckBox checkBox){
+    Model model;
+    public menuOnClickListener(CheckBox checkBox, Model model){
         this.checkBox = checkBox;
+        this.model = model;
     }
     @Override
     public void onClick(View v) {
         if (checkBox.isChecked()){
             checkBox.setChecked(false);
+            model.setEnabled(false);
         }else{
             checkBox.setChecked(true);
         }

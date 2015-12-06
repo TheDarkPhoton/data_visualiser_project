@@ -26,14 +26,9 @@ public class CustomAdapter extends ArrayAdapter {
         LayoutInflater inflater = ((Activity)context).getLayoutInflater();
         convertView = inflater.inflate(R.layout.row, parent, false);
         CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkBox1);
-        convertView.setOnClickListener(new menuOnClickListener(checkBox));
+        convertView.setOnClickListener(new menuOnClickListener(checkBox, modelItems[position]));
         TextView name = (TextView) convertView.findViewById(R.id.textView1);
         name.setText(modelItems[position].getName());
-        if (modelItems[position].isEnabled()) {
-            checkBox.setChecked(true);
-        } else {
-            checkBox.setChecked(false);
-        }
         return convertView;
     }
 }

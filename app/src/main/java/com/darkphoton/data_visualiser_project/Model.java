@@ -17,4 +17,7 @@ public class Model {
     public boolean isEnabled(){
         return this.enabled;
     }
+    public void setEnabled(boolean b){
+        enabled = b;
+    }
 }
