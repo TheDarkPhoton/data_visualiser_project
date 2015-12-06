@@ -1,11 +1,19 @@
 package com.darkphoton.data_visualiser_project;
 
 import android.content.Context;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.darkphoton.data_visualiser_project.data.JSONDownloader;
 import com.darkphoton.data_visualiser_project.data.DataJob;
@@ -21,6 +29,11 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private TextView txtData;
+    private ListView menuDrawerList;
+    private ArrayAdapter<String> menuAdapter;
+    String[] menuArray = { "Environment", "Economics", "Education", "Healthcare", "Other" };
+    Model[] modelItems = new Model[5];
+
     //http://api.worldbank.org/countries/indicators/NY.GDP.MKTP.CD?date=2010:2015&format=json&per_page=10000
     //http://api.worldbank.org/countries/indicators/SH.STA.ACSN?date=2010:2015&format=json&per_page=10000
     //http://api.worldbank.org/countries/indicators/SH.STA.ACSN.RU?date=2010:2015&format=json&per_page=10000
@@ -71,6 +84,16 @@ public class MainActivity extends AppCompatActivity {
         JSONDownloader d = new JSONDownloader(this, jsonJob);
         d.execute("http://api.worldbank.org/countries/indicators/EN.ATM.PM25.MC.ZS?date=2010:2015&format=json&per_page=10000");
 
+
+        menuDrawerList = (ListView) findViewById(R.id.navList);
+        addDrawerItems();
+//        menuDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                System.out.println("Bob's your uncle, position "+position+" is "+modelItems[position].isEnabled());
+//            }
+//        });
+
         /*Temporary test code, for everyone's benefit of understanding how the methods can be used.*/
         ArrayList testArraylist = new ArrayList();
         testArraylist.add("Bob");
@@ -114,6 +137,19 @@ public class MainActivity extends AppCompatActivity {
             c.printStackTrace();
         }
         return object;
+    }
+
+    private void addDrawerItems() {
+//        "Environment", "Economics", "Education", "Healthcare", "Other"
+        modelItems[0] = new Model("Environment", false);
+        modelItems[1] = new Model("Economics", false);
+        modelItems[2] = new Model("Education", false);
+        modelItems[3] = new Model("Healthcare", false);
+        modelItems[4] = new Model("Other", false);
+        CustomAdapter adapter = new CustomAdapter(this, modelItems);
+        menuDrawerList.setAdapter(adapter);
+//        menuAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, menuArray);
+//        menuDrawerList.setAdapter(menuAdapter);
     }
 
     /*This method is used for normalizing the percentages from the Education data indicators as all of
