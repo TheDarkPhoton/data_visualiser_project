@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content" >
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
     <TextView
         android:id="@+id/item_id"
@@ -12,12 +12,12 @@
     <CheckBox
         android:id="@+id/item_checkbox"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="@string/hello_world"/>
 
     <LinearLayout
-        android:id="@+id/slider_layout"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/item_checkbox">
 
         <TextView

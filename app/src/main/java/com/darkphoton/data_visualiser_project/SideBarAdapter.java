@@ -1,5 +1,6 @@
 package com.darkphoton.data_visualiser_project;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -33,8 +36,6 @@ public class SideBarAdapter extends ArrayAdapter<Class> {
 
         TextView item_id = (TextView) convertView.findViewById(R.id.item_id);
         CheckBox checkbox = (CheckBox) convertView.findViewById(R.id.item_checkbox);
-        final TextView seeker_value = (TextView) convertView.findViewById(R.id.seeker_value);
-        SeekBar seekbar = (SeekBar) convertView.findViewById(R.id.item_slider);
 
         try {
             Field id = indicator.getField("id");
@@ -49,17 +50,29 @@ public class SideBarAdapter extends ArrayAdapter<Class> {
             e.printStackTrace();
         }
 
+        final LinearLayout seeker_layout = (LinearLayout) convertView.findViewById(R.id.slider_layout);
+        final ViewGroup.LayoutParams params = seeker_layout.getLayoutParams();
+
         checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 _checkboxes[position] = isChecked;
+
+                if (isChecked){
+                    seeker_layout.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                } else {
+                    params.height = 0;
+                }
+                seeker_layout.requestLayout();
             }
         });
 
+        final TextView slider_value = (TextView) convertView.findViewById(R.id.slider_value);
+        SeekBar seekbar = (SeekBar) convertView.findViewById(R.id.item_slider);
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                seeker_value.setText(progress + "%");
+                slider_value.setText(progress + "%");
             }
 
             @Override
