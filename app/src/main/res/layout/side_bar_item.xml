@@ -36,7 +36,4 @@
             android:progress="100"/>
 
     </LinearLayout>
-
-
-
 </RelativeLayout>

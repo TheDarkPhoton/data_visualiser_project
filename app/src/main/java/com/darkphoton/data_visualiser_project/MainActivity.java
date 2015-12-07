@@ -1,12 +1,18 @@
 package com.darkphoton.data_visualiser_project;
 
 import android.content.Context;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.darkphoton.data_visualiser_project.data.JSONDownloader;
@@ -70,15 +76,60 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        txtData = (TextView)findViewById(R.id.txtData);
+
         List<Class> set = new ArrayList<>(PIndicator.indicatorClasses.values());
         SideBarAdapter indicatorAdapter = new SideBarAdapter(this, android.R.layout.simple_list_item_1, set);
 
-        ListView listView = (ListView) findViewById(R.id.side_list);
+        final ListView listView = (ListView) findViewById(R.id.side_list);
         listView.setAdapter(indicatorAdapter);
 
-        txtData = (TextView)findViewById(R.id.txtData);
-        JSONDownloader d = new JSONDownloader(this, jsonJob);
-        d.execute("http://api.worldbank.org/countries/indicators/NY.GDP.PCAP.CD?date=2010:2015&format=json&per_page=10000");
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                final int firstItemPosition = listView.getFirstVisiblePosition();
+                final int lastItemPosition = firstItemPosition + listView.getChildCount() - 1;
+
+                ArrayList<String> urls = new ArrayList<>();
+
+                for (int i = 0; i < listView.getCount(); i++) {
+                    RelativeLayout item;
+
+                    if (i < firstItemPosition || i > lastItemPosition ) {
+                        item = (RelativeLayout) listView.getAdapter().getView(i, null, listView);
+                    } else {
+                        final int childIndex = i - firstItemPosition;
+                        item = (RelativeLayout) listView.getChildAt(childIndex);
+                    }
+
+                    CheckBox checkbox = (CheckBox) item.getChildAt(1);
+                    if (checkbox.isChecked()){
+                        urls.add("http://api.worldbank.org/countries/indicators/" + ((TextView) item.getChildAt(0)).getText().toString() + "?date=2010:2015&format=json&per_page=10000");
+                    }
+                }
+
+                if (urls.size() > 0) {
+                    JSONDownloader d = new JSONDownloader(MainActivity.this, jsonJob);
+                    d.execute(urls);
+                }
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
 
         /*Temporary test code, for everyone's benefit of understanding how the methods can be used.*/
         ArrayList testArraylist = new ArrayList();

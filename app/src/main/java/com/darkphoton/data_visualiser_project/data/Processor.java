@@ -46,7 +46,11 @@ public class Processor {
             double highest = _countries.get(0).getIndicator(indicator_key).getAverage();
             double lowest = _countries.get(0).getIndicator(indicator_key).getAverage();
             for (int i = 1; i < _countries.size(); i++) {
-                double average = _countries.get(i).getIndicator(indicator_key).getAverage();
+                PIndicator e = _countries.get(i).getIndicator(indicator_key);
+                if (e == null)
+                    continue;
+
+                double average = e.getAverage();
 
                 if (highest < average)
                     highest = average;
@@ -59,7 +63,11 @@ public class Processor {
                 continue;
 
             for (PCountry country : _countries) {
-                country.getIndicator(indicator_key).normalize(highest, lowest);
+                PIndicator e = country.getIndicator(indicator_key);
+                if (e == null)
+                    continue;
+
+                e.normalize(highest, lowest);
             }
         }
     }
