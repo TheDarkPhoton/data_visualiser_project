@@ -7,6 +7,7 @@ public class RenewableInternalFreshwater extends PositiveIndicator {
     public final static String id = "ER.H2O.INTR.PC";
     public final static String name = "Renewable Internal Freshwater";
     public final static String title = "Renewable Internal Freshwater per Capita (cubic meters)";
+    public final static String description ="Renewable internal freshwater resources flows refer to internal renewable resources (internal river flows and groundwater from rainfall) in the country. Renewable internal freshwater resources per capita are calculated using the World Bank's population estimates.";
 
     public RenewableInternalFreshwater(RIndicator indicator){
         super(indicator);
@@ -22,5 +23,9 @@ public class RenewableInternalFreshwater extends PositiveIndicator {
 
     public String getTitle(){
         return title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

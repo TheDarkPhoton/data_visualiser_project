@@ -7,6 +7,7 @@ public class DepositInterestRate extends PositiveIndicator {
     public final static String id = "FR.INR.DPST";
     public final static String name = "Deposit Interest Rate";
     public final static String title = "Deposit interest rate (%)";
+    public final static String description = "Deposit interest rate is the rate paid by commercial or similar banks for demand, time, or savings deposits. The terms and conditions attached to these rates differ by country, however, limiting their comparability.";
 
     public DepositInterestRate(RIndicator indicator){
         super(indicator);
@@ -22,5 +23,9 @@ public class DepositInterestRate extends PositiveIndicator {
 
     public String getTitle(){
         return title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }
