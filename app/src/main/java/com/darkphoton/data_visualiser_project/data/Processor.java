@@ -47,15 +47,13 @@ public class Processor {
             double lowest = _countries.get(0).getIndicator(indicator_key).getAverage();
             for (int i = 1; i < _countries.size(); i++) {
                 PIndicator e = _countries.get(i).getIndicator(indicator_key);
-                if (e == null)
-                    continue;
 
                 double average = e.getAverage();
 
-                if (highest < average)
+                if (highest < average || (Double.isNaN(highest) && !Double.isNaN(average)))
                     highest = average;
 
-                if (lowest > average)
+                if (lowest > average || (Double.isNaN(lowest) && !Double.isNaN(average)))
                     lowest = average;
             }
 
@@ -64,9 +62,6 @@ public class Processor {
 
             for (PCountry country : _countries) {
                 PIndicator e = country.getIndicator(indicator_key);
-                if (e == null)
-                    continue;
-
                 e.normalize(highest, lowest);
             }
         }
@@ -85,7 +80,7 @@ public class Processor {
             output += country.getName() + "\n";
             output += "    value: " + country.getValue() + "\n";
             for (PIndicator indicator : country.getIndicators().values()) {
-                output += "    " + indicator.getName() + ":\n";
+                output += "    " + indicator.getTitle() + ":\n";
                 output += "        average: " + nf.format(indicator.getAverage()) + "\n";
                 output += "        normalized: " + indicator.getNormalizedAverage() + "\n";
             }

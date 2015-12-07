@@ -36,8 +36,7 @@ public class RCountry {
 
         RIndicator indicator = new RIndicator(data_unit);
 
-        if (!indicator.isEmpty())
-            _indicators.put(indicator.getId(), indicator);
+        _indicators.put(indicator.getId(), indicator);
     }
 
     /**
@@ -50,8 +49,7 @@ public class RCountry {
 
         RIndicator old_indicator = _indicators.get(new_indicator.getId());
         if (old_indicator == null) {
-            if (!new_indicator.isEmpty())
-                _indicators.put(new_indicator.getId(), new_indicator);
+            _indicators.put(new_indicator.getId(), new_indicator);
         } else {
             old_indicator.updateDataSet(data_unit);
         }
@@ -66,8 +64,7 @@ public class RCountry {
             RIndicator old_indicator = _indicators.get(new_indicator.getId());
 
             if (old_indicator == null){
-                if (!new_indicator.isEmpty())
-                    _indicators.put(new_indicator.getId(), new_indicator);
+                _indicators.put(new_indicator.getId(), new_indicator);
             } else {
                 old_indicator.updateDataSet(new_indicator.getData());
             }

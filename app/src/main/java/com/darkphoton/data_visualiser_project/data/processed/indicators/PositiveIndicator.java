@@ -9,6 +9,9 @@ public abstract class PositiveIndicator extends PIndicator {
     }
 
     public void normalize(double highest, double lowest){
-        _normalized = (_average - lowest) / (highest - lowest);
+        if (Double.isNaN(_average))
+            _normalized = 0;
+        else
+            _normalized = (_average - lowest) / (highest - lowest);
     }
 }
