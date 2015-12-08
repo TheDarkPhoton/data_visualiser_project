@@ -12,12 +12,12 @@
     <CheckBox
         android:id="@+id/item_checkbox"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world"/>
+        android:layout_height="wrap_content"/>
 
     <LinearLayout
+        android:id="@+id/slider_layout"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_below="@id/item_checkbox">
 
         <TextView

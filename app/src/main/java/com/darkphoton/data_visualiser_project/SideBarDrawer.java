@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.darkphoton.data_visualiser_project.data.JSONDownloader;
 import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
+import com.darkphoton.data_visualiser_project.data.processed.PIndicatorGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +22,13 @@ public class SideBarDrawer implements DrawerLayout.DrawerListener {
     public SideBarDrawer(MainActivity context){
         _context = context;
 
-        List<Class> set = new ArrayList<>(PIndicator.indicatorClasses.values());
-        SideBarAdapter indicatorAdapter = new SideBarAdapter(context, android.R.layout.simple_list_item_1, set);
-
         _listView = (ListView) context.findViewById(R.id.side_list);
+
+        SideBarAdapter groupAdapter = new SideBarAdapter(context, android.R.layout.simple_list_item_1, PIndicator.indicatorGroups);
+        _listView.setAdapter(groupAdapter);
+
+        List<Class> set = new ArrayList<>(PIndicator.indicatorClasses.values());
+        SideBarItemAdapter indicatorAdapter = new SideBarItemAdapter(_context, android.R.layout.simple_list_item_1, set);
         _listView.setAdapter(indicatorAdapter);
 
         _drawer = (DrawerLayout) context.findViewById(R.id.drawer_layout);
