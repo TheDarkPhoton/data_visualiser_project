@@ -7,6 +7,7 @@ public class LongTermUnemploymentMale extends NegativeIndicator {
     public final static String id = "SL.UEM.LTRM.MA.ZS";
     public final static String name = "Long Term Unemployment - Male";
     public final static String title = "Long-term unemployment, male (% of male unemployment) ";
+    public final static String description = "Long-term unemployment refers to the number of people with continuous periods of unemployment extending for a year or longer, expressed as a percentage of the total unemployed.";
 
     public LongTermUnemploymentMale(RIndicator indicator) {
         super(indicator);
@@ -22,5 +23,9 @@ public class LongTermUnemploymentMale extends NegativeIndicator {
 
     public String getTitle(){
         return title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

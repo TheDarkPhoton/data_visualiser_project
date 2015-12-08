@@ -131,4 +131,5 @@ public abstract class PIndicator {
     public abstract String getId();
     public abstract String getName();
     public abstract String getTitle();
+    public abstract String getDescription();
 }

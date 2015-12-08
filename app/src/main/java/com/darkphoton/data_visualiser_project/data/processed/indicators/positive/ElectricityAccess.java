@@ -7,6 +7,7 @@ public class ElectricityAccess extends PositiveIndicator {
     public final static String id = "EG.ELC.ACCS.ZS";
     public final static String name = "Electricity Access";
     public final static String title = "Electricity Access (% of population)";
+    public final static String description = "Access to electricity is the percentage of population with access to electricity. Electrification data are collected from industry, national surveys and international sources.";
 
     public ElectricityAccess(RIndicator indicator){
         super(indicator);
@@ -22,5 +23,9 @@ public class ElectricityAccess extends PositiveIndicator {
 
     public String getTitle(){
         return title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

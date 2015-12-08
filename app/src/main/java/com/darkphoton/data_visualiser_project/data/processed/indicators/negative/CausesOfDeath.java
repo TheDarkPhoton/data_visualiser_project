@@ -7,6 +7,7 @@ public class CausesOfDeath extends NegativeIndicator {
     public final static String id = "SH.DTH.COMM.ZS";
     public final static String name = "Causes of Death";
     public final static String title = "Cause of death, by communicable diseases and maternal, prenatal and nutrition conditions (% of total)";
+    public final static String description = "Cause of death refers to the share of all deaths for all ages by underlying causes. Communicable diseases and maternal, prenatal and nutrition conditions include infectious and parasitic diseases, respiratory infections, and nutritional deficiencies such as underweight and stunting.";
 
     public CausesOfDeath(RIndicator indicator) {
         super(indicator);
@@ -22,5 +23,9 @@ public class CausesOfDeath extends NegativeIndicator {
 
     public String getTitle(){
         return title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }
