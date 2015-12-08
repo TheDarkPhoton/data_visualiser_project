@@ -2,6 +2,10 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/mainLayout"
+                android:gravity="center"
+                android:background="#FFFAFA"
                 tools:context=".MainActivity">
 
     <android.support.v4.widget.DrawerLayout

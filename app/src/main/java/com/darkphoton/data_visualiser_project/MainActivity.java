@@ -1,6 +1,5 @@
 package com.darkphoton.data_visualiser_project;
 
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,6 +17,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+
 public class MainActivity extends AppCompatActivity {
     private SideBarDrawer sideBar;
     private TextView txtData;
@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
             txtData.setText(data.toString());
         }
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +98,15 @@ public class MainActivity extends AppCompatActivity {
             sum+=Integer.parseInt(s);
         }
         return sum/inputArray.size()+"%";
+
+        // adding the fragment to the main activity
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        PieChart_Fragment pieChart_fragment = new PieChart_Fragment();
+        fragmentTransaction.add(R.id.mainLayout , pieChart_fragment , "piechartFragment");
+        fragmentTransaction.commit();
+
     }
 
     @Override
