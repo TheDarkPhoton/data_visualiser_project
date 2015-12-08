@@ -3,6 +3,7 @@ package com.darkphoton.data_visualiser_project;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,8 +25,8 @@ public class SideBarDrawer implements DrawerLayout.DrawerListener {
 
         _listView = (ListView) context.findViewById(R.id.side_list);
 
-        SideBarAdapter groupAdapter = new SideBarAdapter(context, android.R.layout.simple_list_item_1, PIndicator.indicatorGroups);
-        _listView.setAdapter(groupAdapter);
+//        SideBarAdapter groupAdapter = new SideBarAdapter(context, android.R.layout.simple_list_item_1, PIndicator.indicatorGroups);
+//        _listView.setAdapter(groupAdapter);
 
         List<Class> set = new ArrayList<>(PIndicator.indicatorClasses.values());
         SideBarItemAdapter indicatorAdapter = new SideBarItemAdapter(_context, android.R.layout.simple_list_item_1, set);
@@ -53,18 +54,18 @@ public class SideBarDrawer implements DrawerLayout.DrawerListener {
         ArrayList<String> urls = new ArrayList<>();
 
         for (int i = 0; i < _listView.getCount(); i++) {
-            RelativeLayout item;
+            LinearLayout item;
 
             if (i < firstItemPosition || i > lastItemPosition ) {
-                item = (RelativeLayout) _listView.getAdapter().getView(i, null, _listView);
+                item = (LinearLayout) _listView.getAdapter().getView(i, null, _listView);
             } else {
                 final int childIndex = i - firstItemPosition;
-                item = (RelativeLayout) _listView.getChildAt(childIndex);
+                item = (LinearLayout) _listView.getChildAt(childIndex);
             }
 
-            CheckBox checkbox = (CheckBox) item.getChildAt(1);
+            CheckBox checkbox = (CheckBox) ((RelativeLayout) item.getChildAt(0)).getChildAt(1);
             if (checkbox.isChecked()){
-                urls.add("http://api.worldbank.org/countries/indicators/" + ((TextView) item.getChildAt(0)).getText().toString() + "?date=2010:2015&format=json&per_page=10000");
+                urls.add("http://api.worldbank.org/countries/indicators/" + ((TextView) ((RelativeLayout) item.getChildAt(0)).getChildAt(0)).getText().toString() + "?date=2010:2015&format=json&per_page=10000");
             }
         }
 
