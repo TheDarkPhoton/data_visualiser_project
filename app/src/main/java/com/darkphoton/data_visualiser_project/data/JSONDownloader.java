@@ -11,8 +11,9 @@ import org.json.JSONException;
 
 import java.io.BufferedInputStream;
 import java.net.URL;
+import java.util.ArrayList;
 
-public class JSONDownloader extends AsyncTask<String, String, Void> {
+public class JSONDownloader extends AsyncTask<ArrayList<String>, String, Void> {
     private ProgressDialog _progressDialog;
     private Cache _dataCache = new Cache();
     private DataJob _job;
@@ -34,34 +35,36 @@ public class JSONDownloader extends AsyncTask<String, String, Void> {
     }
 
     @Override
-    protected Void doInBackground(String... params) {
+    protected Void doInBackground(ArrayList<String>... params) {
         try {
-            JSONArray json = null;
-            do {
-                String path;
-                if (json == null)
-                    path = params[0] + "&page=1";
-                else
-                    path = params[0] + "&page=" + (json.getJSONObject(0).getInt("page") + 1);
+            for (String param : params[0]) {
+                JSONArray json = null;
+                do {
+                    String path;
+                    if (json == null)
+                        path = param + "&page=1";
+                    else
+                        path = param + "&page=" + (json.getJSONObject(0).getInt("page") + 1);
 
-                StringBuilder stringBuilder = new StringBuilder();
-                URL data = new URL(path);
-                BufferedInputStream bis = new BufferedInputStream(data.openStream());
+                    StringBuilder stringBuilder = new StringBuilder();
+                    URL data = new URL(path);
+                    BufferedInputStream bis = new BufferedInputStream(data.openStream());
 
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                while((bytesRead = bis.read(buffer)) > 0) {
-                    String text = new String(buffer, 0, bytesRead);
-                    stringBuilder.append(text);
-                }
-                bis.close();
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while((bytesRead = bis.read(buffer)) > 0) {
+                        String text = new String(buffer, 0, bytesRead);
+                        stringBuilder.append(text);
+                    }
+                    bis.close();
 
-                json = new JSONArray(stringBuilder.toString());
-                JSONArray indicators = json.getJSONArray(1);
-                for (int i = 0; i < indicators.length(); i++) {
-                    _dataCache.updateDataCache(indicators.getJSONObject(i));
-                }
-            } while (json.getJSONObject(0).getInt("page") < json.getJSONObject(0).getInt("pages"));
+                    json = new JSONArray(stringBuilder.toString());
+                    JSONArray indicators = json.getJSONArray(1);
+                    for (int i = 0; i < indicators.length(); i++) {
+                        _dataCache.updateDataCache(indicators.getJSONObject(i));
+                    }
+                } while (json.getJSONObject(0).getInt("page") < json.getJSONObject(0).getInt("pages"));
+            }
 
         } catch (java.io.IOException e) {
             Log.e("URLException", "Error: " + e.toString());

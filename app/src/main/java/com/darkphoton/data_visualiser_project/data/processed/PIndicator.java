@@ -1,6 +1,5 @@
 package com.darkphoton.data_visualiser_project.data.processed;
 
-import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.CausesOfDeath;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.DieselPumpPrice;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.GINI;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.LongTermUnemploymentFemale;
@@ -33,45 +32,72 @@ import com.darkphoton.data_visualiser_project.data.processed.indicators.positive
 import com.darkphoton.data_visualiser_project.data.raw.RData;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class PIndicator {
     public final static Map<String, Class> indicatorClasses;
+    public final static List<PIndicatorGroup> indicatorGroups;
 
     static {
+        List<PIndicatorGroup> indicators = new ArrayList<>();
+
+        HashMap<String, Class> economics_map = new HashMap<>();
+        economics_map.put("NY.GDP.MKTP.CD", GDP.class);
+        economics_map.put("NY.GNS.ICTR.CD", GrossSavings.class);
+        economics_map.put("FI.RES.TOTL.CD", TotalReserves.class);
+        economics_map.put("IC.TAX.TOTL.CP.ZS", TotalTaxRate.class);
+        economics_map.put("SL.UEM.LTRM.FE.ZS", LongTermUnemploymentFemale.class);
+        economics_map.put("SL.UEM.LTRM.MA.ZS", LongTermUnemploymentMale.class);
+        economics_map.put("FR.INR.DPST", DepositInterestRate.class);
+        economics_map.put("NY.GDP.PCAP.CD", GDPPerCapita.class);
+        indicators.add(new PIndicatorGroup("Economics", economics_map));
+
+        HashMap<String, Class> group2_map = new HashMap<>();
+        group2_map.put("SH.STA.ACSN", SanitationFacilities.class);
+        group2_map.put("SH.STA.ACSN.RU", SanitationFacilitiesRural.class);
+        group2_map.put("SH.STA.ACSN.UR", SanitationFacilitiesUrban.class);
+        group2_map.put("SH.H2O.SAFE.ZS", WaterSources.class);
+        group2_map.put("SH.H2O.SAFE.RU.ZS", WaterSourcesRural.class);
+        group2_map.put("SH.H2O.SAFE.UR.ZS", WaterSourcesUrban.class);
+        group2_map.put("ER.H2O.INTR.PC", RenewableInternalFreshwater.class);
+        indicators.add(new PIndicatorGroup("Group 2", group2_map));
+
+        HashMap<String, Class> energy_map = new HashMap<>();
+        energy_map.put("EG.NSF.ACCS.ZS", NonSolidFuelAccess.class);
+        energy_map.put("EG.ELC.ACCS.ZS", ElectricityAccess.class);
+        energy_map.put("EG.ELC.ACCS.RU.ZS", ElectricityAccessRural.class);
+        energy_map.put("EG.ELC.ACCS.UR.ZS", ElectricityAccessUrban.class);
+        energy_map.put("EP.PMP.DESL.CD", DieselPumpPrice.class);
+        energy_map.put("EP.PMP.SGAS.CD", PetrolPumpPrice.class);
+        indicators.add(new PIndicatorGroup("Energy", energy_map));
+
+        HashMap<String, Class> climate_map = new HashMap<>();
+        climate_map.put("EN.POP.DNST", PollutionDensity.class);
+        climate_map.put("EN.ATM.PM25.MC.M3", PollutionMeanAnnualExposure.class);
+        climate_map.put("EN.ATM.PM25.MC.ZS", PollutionWHOGuideline.class);
+        indicators.add(new PIndicatorGroup("Climate", climate_map));
+
+        HashMap<String, Class> education_map = new HashMap<>();
+        education_map.put("SE.XPD.TOTL.GD.ZS", EducationExpenditure.class);
+        education_map.put("SE.ADT.LITR.ZS", LiteracyRate.class);
+        indicators.add(new PIndicatorGroup("Education", education_map));
+
+        HashMap<String, Class> other_map = new HashMap<>();
+        other_map.put("SI.POV.GINI", GINI.class);
+        other_map.put("IC.LGL.CRED.XQ", LegalRightsIndex.class);
+        other_map.put("IS.RRS.PASG.KM", RailwayPassengersCarried.class);
+        indicators.add(new PIndicatorGroup("Other", other_map));
+
+        indicatorGroups = Collections.unmodifiableList(indicators);
+
         HashMap<String, Class> map = new HashMap<>();
-        map.put("NY.GDP.MKTP.CD", GDP.class);
-        map.put("SH.STA.ACSN", SanitationFacilities.class);
-        map.put("SH.STA.ACSN.RU", SanitationFacilitiesRural.class);
-        map.put("SH.STA.ACSN.UR", SanitationFacilitiesUrban.class);
-        map.put("SH.H2O.SAFE.ZS", WaterSources.class);
-        map.put("SH.H2O.SAFE.RU.ZS", WaterSourcesRural.class);
-        map.put("SH.H2O.SAFE.UR.ZS", WaterSourcesUrban.class);
-        map.put("EG.NSF.ACCS.ZS", NonSolidFuelAccess.class);
-        map.put("EG.ELC.ACCS.ZS", ElectricityAccess.class);
-        map.put("EG.ELC.ACCS.RU.ZS", ElectricityAccessRural.class);
-        map.put("EG.ELC.ACCS.UR.ZS", ElectricityAccessUrban.class);
-        map.put("ER.H2O.INTR.PC", RenewableInternalFreshwater.class);
-        map.put("EN.POP.DNST", PollutionDensity.class);
-        map.put("SH.DTH.COMM.ZS", CausesOfDeath.class);
-        map.put("SI.POV.GINI", GINI.class);
-        map.put("NY.GNS.ICTR.CD", GrossSavings.class);
-        map.put("FI.RES.TOTL.CD", TotalReserves.class);
-        map.put("FR.INR.DPST", DepositInterestRate.class);
-        map.put("IC.TAX.TOTL.CP.ZS", TotalTaxRate.class);
-        map.put("IC.LGL.CRED.XQ", LegalRightsIndex.class);
-        map.put("SL.UEM.LTRM.FE.ZS", LongTermUnemploymentFemale.class);
-        map.put("SL.UEM.LTRM.MA.ZS", LongTermUnemploymentMale.class);
-        map.put("SE.XPD.TOTL.GD.ZS", EducationExpenditure.class);
-        map.put("SE.ADT.LITR.ZS", LiteracyRate.class);
-        map.put("IS.RRS.PASG.KM", RailwayPassengersCarried.class);
-        map.put("EP.PMP.DESL.CD", DieselPumpPrice.class);
-        map.put("EP.PMP.SGAS.CD", PetrolPumpPrice.class);
-        map.put("EN.ATM.PM25.MC.M3", PollutionMeanAnnualExposure.class);
-        map.put("EN.ATM.PM25.MC.ZS", PollutionWHOGuideline.class);
-        map.put("NY.GDP.PCAP.CD", GDPPerCapita.class);
+        for (PIndicatorGroup indicator : indicators) {
+            map.putAll(indicator.getIndicators());
+        }
 
         indicatorClasses = Collections.unmodifiableMap(map);
     }
