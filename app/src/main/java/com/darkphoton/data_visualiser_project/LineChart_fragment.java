@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -64,14 +63,6 @@ public class LineChart_fragment extends Fragment {
 
                 //create line chart
                 lineChart = (LineChart) view.findViewById(R.id.lineChart);
-
-//                RelativeLayout.LayoutParams relativeParams = new RelativeLayout.LayoutParams(
-//                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//                chartLayout.addView(lineChart, relativeParams);
-
-//                chartLayout.addView(lineChart);
-
-//                mainlayout.addView(chartLayout);
 
                 //setting up the animation for the graph
                 lineChart.animateXY(7000, 500);
