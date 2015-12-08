@@ -39,10 +39,8 @@ public class PCountry {
         double total = 0;
         int count = 0;
         for (PIndicator indicator : _indicators.values()) {
-            if (indicator.getNormalizedAverage() > 0){
-                total += indicator.getNormalizedAverage();
-                ++count;
-            }
+            total += indicator.getNormalizedAverage();
+            ++count;
         }
 
         _value = (count == 0) ? 0 : total / count;

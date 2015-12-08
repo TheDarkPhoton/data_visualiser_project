@@ -36,8 +36,7 @@ public class RIndicator {
 
         RData data = new RData(data_unit);
 
-        if (data.isValid())
-            _data.put(data.getDate(), data);
+        _data.put(data.getDate(), data);
     }
 
     /**
@@ -47,8 +46,7 @@ public class RIndicator {
     private void updateData(RData new_data){
         RData old_data = _data.get(new_data.getDate());
         if (old_data == null){
-            if (new_data.isValid())
-                _data.put(new_data.getDate(), new_data);
+            _data.put(new_data.getDate(), new_data);
         } else {
             old_data.updateData(new_data);
         }

@@ -7,6 +7,7 @@ public class WaterSourcesUrban extends PositiveIndicator {
     public final static String id = "SH.H2O.SAFE.UR.ZS";
     public final static String name = "Improved Water Sources - Urban";
     public final static String title = "Improved Water Sources - Urban (% of population with access)";
+    public final static String description ="Access to an improved water source refers to the percentage of the population using an improved drinking water source. The improved drinking water source includes piped water on premises (piped household water connection located inside the user’s dwelling, plot or yard), and other improved drinking water sources (public taps or standpipes, tube wells or boreholes, protected dug wells, protected springs, and rainwater collection).";
 
     public WaterSourcesUrban(RIndicator indicator){
         super(indicator);
@@ -22,5 +23,9 @@ public class WaterSourcesUrban extends PositiveIndicator {
 
     public String getTitle(){
         return title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }
