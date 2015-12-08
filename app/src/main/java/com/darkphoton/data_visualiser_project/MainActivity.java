@@ -1,10 +1,15 @@
 package com.darkphoton.data_visualiser_project;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.darkphoton.data_visualiser_project.data.DataJob;
@@ -36,6 +41,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ViewGroup layout = (ViewGroup) findViewById(android.R.id.content);
+        CustomPieChart chart = new CustomPieChart(this);
+        chart.setLayoutParams(
+                new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
+
+        layout.addView(chart, 0);
 
         txtData = (TextView)findViewById(R.id.txtData);
         sideBar = new SideBarDrawer(this);
