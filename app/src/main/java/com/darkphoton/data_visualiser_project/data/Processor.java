@@ -36,7 +36,7 @@ public class Processor {
 
         _countries = _countries.subList(0, (count > 1) ? count : 1);
     }
-
+    //test normalization
     public void normalize(){
         Collection<PIndicator> indicators = _countries.get(0).getIndicators().values();
 

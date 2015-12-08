@@ -11,7 +11,7 @@ public class PIndicatorGroup {
         _name = name;
         _indicators = indicators;
     }
-
+    // test correct name returned
     public String getName(){
         return _name;
     }

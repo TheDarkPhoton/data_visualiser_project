@@ -104,7 +104,7 @@ public abstract class PIndicator {
 
     protected double _average = 0;
     protected double _normalized = 0;
-
+// gets average by adding everything together then dividing #todo testing
     public PIndicator(RIndicator indicator){
         double total = 0;
         int count = 0;
