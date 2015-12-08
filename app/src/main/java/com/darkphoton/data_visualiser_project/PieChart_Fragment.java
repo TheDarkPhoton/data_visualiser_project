@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.darkphoton.data_visualiser_project.data.processed.PCountry;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
@@ -14,6 +15,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PieChart_Fragment extends Fragment {
     private PieChart pieChart;
@@ -32,6 +34,8 @@ public class PieChart_Fragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pie_chart , container , false);
 
+
+
         //initialing arrays
         valuesForCountries = new float[]{ 40, 65, 72 , 76 , 82};
         topCountries = new String[] {"China" , "France" , "Japan" , "UK" , "USA" };
@@ -49,26 +53,22 @@ public class PieChart_Fragment extends Fragment {
             pieChart.setHoleColorTransparent(true);
             pieChart.setTransparentCircleRadius(37f);
 
-            addData();
         }
 
         return view;
     }
 
-    public void addData(){
+    public void addData(List<PCountry> countries){
         //arraylist for entry for PieChart
 
-        ArrayList<Entry> avarageValueTopCountiresValue = new ArrayList<>();
-
-        for (int i = 0 ; i < valuesForCountries.length ; i++){
-            avarageValueTopCountiresValue.add(new Entry(valuesForCountries[i] , i));
+        ArrayList<Entry> averageValueTopCountriesValue = new ArrayList<>();
+        for (int i = 0; i < countries.size(); i++) {
+            averageValueTopCountriesValue.add(new Entry((float)countries.get(i).getValue(), i));
         }
 
-        // arraylist to hold the countries
-        ArrayList<String> avarageTopCountriesName = new ArrayList<>();
-
-        for (int i = 0 ; i < topCountries.length ; i++){
-            avarageTopCountriesName.add(topCountries[i]);
+        ArrayList<String> averageTopCountriesName = new ArrayList<>();
+        for (int i = 0 ; i < countries.size() ; i++){
+           averageTopCountriesName.add(countries.get(i).getName());
         }
 
         // arraylist to contain colors for each section of piechart
@@ -80,13 +80,13 @@ public class PieChart_Fragment extends Fragment {
         }
 
         // creating PieDataset to hold the values
-        PieDataSet dataSet = new PieDataSet(avarageValueTopCountiresValue , "Countries");
+        PieDataSet dataSet = new PieDataSet(averageValueTopCountriesValue , "Countries");
         dataSet.setSelectionShift(5f);
         dataSet.setSliceSpace(0f);
         dataSet.setColors(colors);
 
         // creating pieData to disaply the final piechart
-        PieData data = new PieData(avarageTopCountriesName , dataSet);
+        PieData data = new PieData(averageTopCountriesName , dataSet);
         data.setValueTextSize(15f);
         pieChart.setData(data);
         pieChart.animateX( 1500 , Easing.EasingOption.EaseInCirc);

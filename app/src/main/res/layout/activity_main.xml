@@ -5,23 +5,27 @@
                 android:layout_centerHorizontal="true"
                 android:id="@+id/mainLayout"
                 android:gravity="center"
+
                 android:background="#FFFAFA"
                 tools:context=".MainActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragmentchart"
+       />
+
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
+        android:minWidth="100dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ScrollView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
+            android:minWidth="300dp"
             android:layout_height="fill_parent">
 
-            <TextView
-                android:id="@+id/txtData"
-                android:text="@string/hello_world"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
 
         </ScrollView>
 
@@ -29,4 +33,6 @@
             layout="@layout/side_bar" />
 
     </android.support.v4.widget.DrawerLayout>
+
+
 </RelativeLayout>

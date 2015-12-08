@@ -1,5 +1,8 @@
 package com.darkphoton.data_visualiser_project;
 
+import android.content.Context;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,6 +12,7 @@ import android.widget.TextView;
 import com.darkphoton.data_visualiser_project.data.DataJob;
 import com.darkphoton.data_visualiser_project.data.Processor;
 import com.darkphoton.data_visualiser_project.data.Cache;
+import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,6 +25,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private SideBarDrawer sideBar;
     private TextView txtData;
+    private PieChart_Fragment pieChart_fragment;
 
     DataJob jsonJob = new DataJob() {
         @Override
@@ -28,7 +33,9 @@ public class MainActivity extends AppCompatActivity {
             Processor data = new Processor(cache);
             data.normalize();
             data.reduceToTop(5);
-            txtData.setText(data.toString());
+           // txtData.setText(data.toString());
+            pieChart_fragment.addData(data.getCountries());
+
         }
     };
 
@@ -38,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        txtData = (TextView)findViewById(R.id.txtData);
+       // txtData = (TextView)findViewById(R.id.txtData);
         sideBar = new SideBarDrawer(this);
 
         /*Temporary test code, for everyone's benefit of understanding how the methods can be used.*/
@@ -49,6 +56,13 @@ public class MainActivity extends AppCompatActivity {
         ArrayList reconstructedArrayList = (ArrayList) deserialize("testArrayList");
         System.out.println(reconstructedArrayList.get(0));
         /*End of test code*/
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        pieChart_fragment = new PieChart_Fragment();
+        fragmentTransaction.add(R.id.fragmentchart , pieChart_fragment , "piechartFragment");
+        fragmentTransaction.commit();
     }
 
     /*This method will serialize the given object with the given filename in the /files directory
@@ -92,20 +106,12 @@ public class MainActivity extends AppCompatActivity {
     * except for "Government expenditure on education" which is given as "% of GDP". While this could
     * be converted to "% of GDP per Capita" it seems somewhat redundant because the data indicators
      * range dramatically, from 23% to as much as 297%*/
-    public static String normalizePercentages(ArrayList<String> inputArray){
+    public String normalizePercentages(ArrayList<String> inputArray){
         int sum = 0;
         for(String s: inputArray){
             sum+=Integer.parseInt(s);
         }
         return sum/inputArray.size()+"%";
-
-        // adding the fragment to the main activity
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        PieChart_Fragment pieChart_fragment = new PieChart_Fragment();
-        fragmentTransaction.add(R.id.mainLayout , pieChart_fragment , "piechartFragment");
-        fragmentTransaction.commit();
 
     }
 
