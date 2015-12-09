@@ -114,6 +114,7 @@ public class CustomDrawer extends View implements OnTouchListener {
     }
 
     int _y = 0;
+    int _x = 0;
     private static final String DEBUG_TAG = "Velocity";
     private VelocityTracker mVelocityTracker = null;
 
@@ -123,55 +124,53 @@ public class CustomDrawer extends View implements OnTouchListener {
         int action = event.getActionMasked();
         int pointerId = event.getPointerId(index);
 
-        if (event.getX() > getWidth() - 250 && event.getX() < getWidth() - 50 ){
-            for (int i = 0; i < _countries.size(); i++) {
-                if (event.getY() > 50 + 250 * i && event.getY() < 250 + 250 * i){
-//                    _y = getHeight() * i;
-                    _new_index = i;
-                    animateY(i);
+        switch(action) {
+            case MotionEvent.ACTION_DOWN:
+                if (event.getX() > getWidth() - 250 && event.getX() < getWidth() - 50 ){
+                    for (int i = 0; i < _countries.size(); i++) {
+                        if (event.getY() > 50 + 250 * i && event.getY() < 250 + 250 * i){
+                            _new_index = i;
+                            animateY(i);
+                        }
+                    }
                 }
-            }
-        }
 
-//        switch(action) {
-//            case MotionEvent.ACTION_DOWN:
-//
-//                if(mVelocityTracker == null) {
-//                    // Retrieve a new VelocityTracker object to watch the velocity of a motion.
-//                    mVelocityTracker = VelocityTracker.obtain();
-//                }
-//                else {
-//                    // Reset the velocity tracker back to its initial state.
-//                    mVelocityTracker.clear();
-//                }
-//                // Add a user's movement to the tracker.
-//                mVelocityTracker.addMovement(event);
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                mVelocityTracker.addMovement(event);
-//                // When you want to determine the velocity, call
-//                // computeCurrentVelocity(). Then call getXVelocity()
-//                // and getYVelocity() to retrieve the velocity for each pointer ID.
-//                mVelocityTracker.computeCurrentVelocity(1000);
-//                // Log velocity of pixels per second
-//                // Best practice to use VelocityTrackerCompat where possible.
-//                Log.d("", "X velocity: " +
-//                        VelocityTrackerCompat.getXVelocity(mVelocityTracker,
-//                                pointerId));
-//                Log.d("", "Y velocity: " +
-//                        VelocityTrackerCompat.getYVelocity(mVelocityTracker,
-//                                pointerId));
-//
+                if(mVelocityTracker == null) {
+                    // Retrieve a new VelocityTracker object to watch the velocity of a motion.
+                    mVelocityTracker = VelocityTracker.obtain();
+                }
+                else {
+                    // Reset the velocity tracker back to its initial state.
+                    mVelocityTracker.clear();
+                }
+                // Add a user's movement to the tracker.
+                mVelocityTracker.addMovement(event);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                mVelocityTracker.addMovement(event);
+                // When you want to determine the velocity, call
+                // computeCurrentVelocity(). Then call getXVelocity()
+                // and getYVelocity() to retrieve the velocity for each pointer ID.
+                mVelocityTracker.computeCurrentVelocity(1000);
+                // Log velocity of pixels per second
+                // Best practice to use VelocityTrackerCompat where possible.
+                Log.d("", "X velocity: " +
+                        VelocityTrackerCompat.getXVelocity(mVelocityTracker,
+                                pointerId));
+                Log.d("", "Y velocity: " +
+                        VelocityTrackerCompat.getYVelocity(mVelocityTracker,
+                                pointerId));
+
 //                _y += -(int)(VelocityTrackerCompat.getYVelocity(mVelocityTracker, pointerId) / 25);
-//                break;
-//            case MotionEvent.ACTION_UP:
-//            case MotionEvent.ACTION_CANCEL:
-//                // Return a VelocityTracker object back to be re-used by others.
-//                mVelocityTracker.recycle();
-//                mVelocityTracker = null;
-//
-//                break;
-//        }
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                // Return a VelocityTracker object back to be re-used by others.
+                mVelocityTracker.recycle();
+                mVelocityTracker = null;
+
+                break;
+        }
 
         return true;
     }
@@ -186,9 +185,9 @@ public class CustomDrawer extends View implements OnTouchListener {
         endY = getHeight() * index;
 
         if (_current_index < index){
-            integral = (endY - startY) * 0.01f;
+            integral = (endY - startY) * 0.05f;
         } else if (index < _current_index) {
-            integral = (endY - startY) * 0.01f;
+            integral = (endY - startY) * 0.05f;
         }
     }
 
