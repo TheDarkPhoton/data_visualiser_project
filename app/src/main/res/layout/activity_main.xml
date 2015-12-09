@@ -8,21 +8,21 @@
 
                 android:background="#FFFAFA"
                 tools:context=".MainActivity">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/fragmentchart"
-       />
 
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
-        android:minWidth="100dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:nestedScrollingEnabled="false">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/fragmentchart"
+            />
         <ScrollView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:minWidth="300dp"
             android:layout_height="fill_parent">
 
