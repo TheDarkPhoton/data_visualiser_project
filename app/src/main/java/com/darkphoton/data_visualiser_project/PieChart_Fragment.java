@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.darkphoton.data_visualiser_project.data.processed.PCountry;
 import com.github.mikephil.charting.animation.Easing;
@@ -12,6 +13,8 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
@@ -19,8 +22,8 @@ import java.util.List;
 
 public class PieChart_Fragment extends Fragment {
     private PieChart pieChart;
-    private float [] valuesForCountries;
-    private String [] topCountries;
+    private ArrayList<Entry> averageValueTopCountriesValue;
+    private ArrayList<String> averageTopCountriesName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,12 +37,6 @@ public class PieChart_Fragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pie_chart , container , false);
 
-
-
-        //initialing arrays
-        valuesForCountries = new float[]{ 40, 65, 72 , 76 , 82};
-        topCountries = new String[] {"China" , "France" , "Japan" , "UK" , "USA" };
-
         // check if view is created to prevent NullPointerException
         if (view != null) {
             // creating piechart
@@ -52,21 +49,22 @@ public class PieChart_Fragment extends Fragment {
             pieChart.setHoleRadius(35f);
             pieChart.setHoleColorTransparent(true);
             pieChart.setTransparentCircleRadius(37f);
+            piechartIsPressed();
 
         }
 
         return view;
     }
 
+    // method to add the data to the piechart and dispaly it
     public void addData(List<PCountry> countries){
         //arraylist for entry for PieChart
-
-        ArrayList<Entry> averageValueTopCountriesValue = new ArrayList<>();
+        averageValueTopCountriesValue = new ArrayList<>();
         for (int i = 0; i < countries.size(); i++) {
             averageValueTopCountriesValue.add(new Entry((float)countries.get(i).getValue(), i));
         }
 
-        ArrayList<String> averageTopCountriesName = new ArrayList<>();
+        averageTopCountriesName = new ArrayList<>();
         for (int i = 0 ; i < countries.size() ; i++){
            averageTopCountriesName.add(countries.get(i).getName());
         }
@@ -75,7 +73,7 @@ public class PieChart_Fragment extends Fragment {
 
         ArrayList <Integer> colors = new ArrayList<>();
 
-        for (int i = 0 ; i < valuesForCountries.length ; i++){
+        for (int i = 0 ; i < countries.size() ; i++){
             colors.add(ColorTemplate.VORDIPLOM_COLORS[i]);
         }
 
@@ -90,6 +88,22 @@ public class PieChart_Fragment extends Fragment {
         data.setValueTextSize(15f);
         pieChart.setData(data);
         pieChart.animateX( 1500 , Easing.EasingOption.EaseInCirc);
+    }
+
+    public void piechartIsPressed () {
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry entry, int i, Highlight highlight) {
+                Toast toast = Toast.makeText(getContext() , "" + averageTopCountriesName.get(entry.getXIndex()) , Toast.LENGTH_SHORT );
+                toast.show();
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
     }
 
 }
