@@ -1,18 +1,11 @@
 package com.darkphoton.data_visualiser_project;
 
-import android.app.ActionBar;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.darkphoton.data_visualiser_project.data.DataJob;
 import com.darkphoton.data_visualiser_project.data.Processor;
@@ -27,14 +20,14 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private SideBarDrawer sideBar;
-    private CustomPieChart drawer;
+    private CustomDrawer drawer;
 
     DataJob jsonJob = new DataJob() {
         @Override
         public void run(Cache cache) {
             Processor data = new Processor(cache);
             data.normalize();
-            data.reduceToTop(5);
+            data.reduceToTop(6);
             drawer.updateData(data);
         }
     };
@@ -49,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 //        btn_test.setTypeface(font);
 
         ViewGroup layout = (ViewGroup) findViewById(R.id.drawer_layout);
-        drawer = new CustomPieChart(this);
+        drawer = new CustomDrawer(this);
         drawer.setLayoutParams(
                 new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
