@@ -2,12 +2,14 @@ package com.darkphoton.data_visualiser_project;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,7 +27,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private SideBarDrawer sideBar;
-    private TextView txtData;
+    private CustomPieChart drawer;
 
     DataJob jsonJob = new DataJob() {
         @Override
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
             Processor data = new Processor(cache);
             data.normalize();
             data.reduceToTop(5);
-            txtData.setText(data.toString());
+            drawer.updateData(data);
         }
     };
 
@@ -42,16 +44,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ViewGroup layout = (ViewGroup) findViewById(android.R.id.content);
-        CustomPieChart chart = new CustomPieChart(this);
-        chart.setLayoutParams(
+//        Typeface font = Typeface.createFromAsset(getAssets(), "geobats.ttf");
+//        Button btn_test = (Button) findViewById(R.id.asset_test);
+//        btn_test.setTypeface(font);
+
+        ViewGroup layout = (ViewGroup) findViewById(R.id.drawer_layout);
+        drawer = new CustomPieChart(this);
+        drawer.setLayoutParams(
                 new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
 
-        layout.addView(chart, 0);
+        layout.addView(drawer, 0);
 
-        txtData = (TextView)findViewById(R.id.txtData);
         sideBar = new SideBarDrawer(this);
 
         /*Temporary test code, for everyone's benefit of understanding how the methods can be used.*/
