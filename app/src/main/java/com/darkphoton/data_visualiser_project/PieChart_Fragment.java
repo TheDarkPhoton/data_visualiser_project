@@ -2,6 +2,9 @@ package com.darkphoton.data_visualiser_project;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +52,7 @@ public class PieChart_Fragment extends Fragment {
             pieChart.setHoleRadius(35f);
             pieChart.setHoleColorTransparent(true);
             pieChart.setTransparentCircleRadius(37f);
-            piechartIsPressed();
+//            piechartIsPressed();
 
         }
 
@@ -57,7 +60,7 @@ public class PieChart_Fragment extends Fragment {
     }
 
     // method to add the data to the piechart and dispaly it
-    public void addData(List<PCountry> countries){
+    public void addData(final List<PCountry> countries){
         //arraylist for entry for PieChart
         averageValueTopCountriesValue = new ArrayList<>();
         for (int i = 0; i < countries.size(); i++) {
@@ -71,7 +74,7 @@ public class PieChart_Fragment extends Fragment {
 
         // arraylist to contain colors for each section of piechart
 
-        ArrayList <Integer> colors = new ArrayList<>();
+        final ArrayList <Integer> colors = new ArrayList<>();
 
         for (int i = 0 ; i < countries.size() ; i++){
             colors.add(ColorTemplate.VORDIPLOM_COLORS[i]);
@@ -87,15 +90,22 @@ public class PieChart_Fragment extends Fragment {
         PieData data = new PieData(averageTopCountriesName , dataSet);
         data.setValueTextSize(15f);
         pieChart.setData(data);
-        pieChart.animateX( 1500 , Easing.EasingOption.EaseInCirc);
-    }
+        pieChart.animateX(1500, Easing.EasingOption.EaseInCirc);
 
-    public void piechartIsPressed () {
         pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry entry, int i, Highlight highlight) {
-                Toast toast = Toast.makeText(getContext() , "" + averageTopCountriesName.get(entry.getXIndex()) , Toast.LENGTH_SHORT );
-                toast.show();
+                int countrypressed = entry.getXIndex();
+
+                Log.d("country selected" , ""+ countries.get(countrypressed).getName());
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                List_View_fragment secondframent = new List_View_fragment(countries.get(countrypressed));
+
+                fragmentTransaction.replace(R.id.fragmentchart , secondframent);
+                fragmentTransaction.addToBackStack("piechart");
+                fragmentTransaction.commit();
 
             }
 
@@ -104,6 +114,8 @@ public class PieChart_Fragment extends Fragment {
 
             }
         });
+
+
     }
 
 }
