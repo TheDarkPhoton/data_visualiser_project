@@ -1,5 +1,6 @@
 package com.darkphoton.data_visualiser_project.data.processed;
 
+import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.CausesOfDeath;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.DieselPumpPrice;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.GINI;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.LongTermUnemploymentFemale;
@@ -90,6 +91,7 @@ public abstract class PIndicator {
         other_map.put("SI.POV.GINI", GINI.class);
         other_map.put("IC.LGL.CRED.XQ", LegalRightsIndex.class);
         other_map.put("IS.RRS.PASG.KM", RailwayPassengersCarried.class);
+        other_map.put("SH.DTH.COMM.ZS", CausesOfDeath.class);
         indicators.add(new PIndicatorGroup("Other", other_map));
 
         indicatorGroups = Collections.unmodifiableList(indicators);

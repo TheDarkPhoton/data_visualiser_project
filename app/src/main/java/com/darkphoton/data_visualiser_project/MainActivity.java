@@ -9,8 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import com.darkphoton.data_visualiser_project.data.DataJob;
 import com.darkphoton.data_visualiser_project.data.Processor;
@@ -22,7 +20,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.jar.Manifest;
 
 public class MainActivity extends AppCompatActivity {
     public static Point screen_size = new Point();
@@ -35,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         public void run(Cache cache) {
             Processor data = new Processor(cache);
             data.normalize();
-            data.reduceToTop(6);
+            data.reduceToTop(20);
             countries.removeAllViews();
             countries.addView(new CountryList(MainActivity.this, data));
         }
@@ -55,13 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
         countries = (HorizontalScrollView) findViewById(R.id.country_list);
         countries.addView(new CountryList(this));
-
-//        View item = LayoutInflater.from(layout.getContext()).inflate(R.layout.country_item, null);
-//        layout.addView(item, 0);
-//
-//        TextView textView = (TextView) item.findViewById(R.id.country_pos);
-//        textView.setBackgroundColor(Color.RED);
-//        _scrollView = (ScrollView) item.findViewById(R.id.indicator_items);
 
         sideBar = new SideBarDrawer(this);
 

@@ -4,5 +4,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    <string name="lithuania">A</string>
+    <string name="information">&#xf129;</string>
+    <string name="pie_chart">&#xf200;</string>
+    <string name="line_chart">&#xf201;</string>
 </resources>
