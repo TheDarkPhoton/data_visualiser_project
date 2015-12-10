@@ -49,37 +49,38 @@ public class LineGraphPanel extends PartialPanel {
         setY(size.y);
         setGravity(Gravity.CENTER);
 
-        RelativeLayout relativeLayout= new RelativeLayout(context);
-        relativeLayout.setLayoutParams(
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        addView(relativeLayout);
+//        RelativeLayout relativeLayout= new RelativeLayout(context);
+//        relativeLayout.setLayoutParams(
+//                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//        addView(relativeLayout);
 
-        xAxisLabel = new TextView(context);
-        xAxisLabel.setText("Year");
-        xAxisLabel.setTextSize(20f);
-        xAxisLabel.setTextColor(Color.BLACK);
-        RelativeLayout.LayoutParams relativeParams1 = new LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        relativeParams1.addRule(Gravity.CENTER);
-        relativeParams1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//        xAxisLabel = new TextView(context);
+//        xAxisLabel.setText("Year");
+//        xAxisLabel.setTextSize(20f);
+//        xAxisLabel.setTextColor(Color.BLACK);
+//        RelativeLayout.LayoutParams relativeParams1 = new LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+//        relativeParams1.addRule(Gravity.CENTER);
+//        relativeParams1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 
-        yAxisLabel = new TextView(context);
-        yAxisLabel.setText(indicName);
-        yAxisLabel.setTextSize(20f);
-        yAxisLabel.setTextColor(Color.BLACK);
-        RelativeLayout.LayoutParams relativeParams2 = new LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        relativeParams2.addRule(RelativeLayout.ALIGN_LEFT, RelativeLayout.TRUE);
+//        yAxisLabel = new TextView(context);
+//        yAxisLabel.setText(indicName);
+//        yAxisLabel.setTextSize(20f);
+//        yAxisLabel.setTextColor(Color.BLACK);
+//        RelativeLayout.LayoutParams relativeParams2 = new LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+//        relativeParams2.addRule(RelativeLayout.ALIGN_LEFT, RelativeLayout.TRUE);
 
         lineChart = new LineChart(context);
         lineChart.setLayoutParams(
                 new ViewGroup.LayoutParams((int) (size.x * 0.9), (int) (size.y * 0.9)));
-        relativeLayout.addView(lineChart);
 
-        relativeLayout.addView(xAxisLabel, relativeParams1);
-        relativeLayout.addView(yAxisLabel, relativeParams2);
+        addView(lineChart);
+
+//        relativeLayout.addView(xAxisLabel, relativeParams1);
+//        relativeLayout.addView(yAxisLabel, relativeParams2);
 
         lineChart.animateXY(7000, 500);
         lineChart.setDescription("");
-        lineChart.setNoDataTextDescription("No Data Provided");
+        lineChart.setNoDataTextDescription("This indicator does not have any valid data");
         lineChart.setTouchEnabled(false);
         lineChart.setDragEnabled(false);
         lineChart.setScaleEnabled(true);
@@ -110,6 +111,8 @@ public class LineGraphPanel extends PartialPanel {
     }
 
     public void open(Pair<String, RIndicator> data){
+        _closed = false;
+
         setDataValues(data);
         lineChart.invalidate();
 
@@ -122,6 +125,8 @@ public class LineGraphPanel extends PartialPanel {
     }
 
     public void close(){
+        _closed = true;
+
         setY(0);
         TranslateAnimation animation = new TranslateAnimation(0, 0, 0, size.y);
         animation.setInterpolator(new DecelerateInterpolator(1.5f));

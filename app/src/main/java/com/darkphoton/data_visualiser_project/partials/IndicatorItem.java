@@ -22,6 +22,7 @@ import com.darkphoton.data_visualiser_project.data.raw.RData;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by darkphoton on 10/12/15.
@@ -121,13 +122,29 @@ public class IndicatorItem extends RelativeLayout {
         lineLayout.addView(line);
     }
 
-    private ArrayList<Pair<String, Double>> getPieChartData(){
-        ArrayList<Pair<String, Double>> data = new ArrayList<>();
+    private List<Pair<String, Double>> getPieChartData(){
+        List<Pair<String, Double>> data = new ArrayList<>();
 
-        for (PCountry country : _data.getCountries()) {
+        int country_index = -1;
+
+        for (int i = 0; i < _data.getCountries().size(); i++) {
+            PCountry country = _data.getCountries().get(i);
+            if (_country == country)
+                country_index = i;
+
             PIndicator indicator = country.getIndicator(_indicator.getId());
             Pair<String, Double> d = new Pair<>(country.getName(), indicator.getAverage());
             data.add(d);
+        }
+
+        if (country_index - 3 < 0){
+            data = data.subList(0, 7);
+        } else if (country_index + 4 >= data.size()){
+            data = data.subList(data.size() - 7, data.size());
+        } else {
+            int start = country_index - 3 >= 0 ? country_index - 3 : 0;
+            int end = start + 7 < data.size() ? start + 7 : data.size();
+            data = data.subList(start, end);
         }
 
         return data;

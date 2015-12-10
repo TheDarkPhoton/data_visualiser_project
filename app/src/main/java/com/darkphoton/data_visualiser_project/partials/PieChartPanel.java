@@ -34,7 +34,6 @@ public class PieChartPanel extends PartialPanel {
     private PieChart pieChart;
 
     private ArrayList<Integer> colours = new ArrayList<>();
-    private boolean _closed = true;
 
     public PieChartPanel(Context context) {
         super(context);
@@ -43,13 +42,9 @@ public class PieChartPanel extends PartialPanel {
         setGravity(Gravity.CENTER);
         setY(-size.y);
 
-        relativeLayout = new RelativeLayout(context);
-        relativeLayout.setLayoutParams(
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
         pieChart = new PieChart(context);
         pieChart.setLayoutParams(
-                new ViewGroup.LayoutParams((int) (size.y * 0.8f), (int) (size.y * 0.8f)));
+                new ViewGroup.LayoutParams((int) (size.x * 0.9f), (int) (size.y * 0.9f)));
         pieChart.setOnChartGestureListener(null);
         pieChart.setDrawHoleEnabled(true);
         pieChart.setHoleRadius(35f);
@@ -58,13 +53,7 @@ public class PieChartPanel extends PartialPanel {
         pieChart.setDescription("");
         initColours(20);
 
-        relativeLayout.addView(pieChart);
-        addView(relativeLayout);
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return _closed || super.onInterceptTouchEvent(ev);
+        addView(pieChart);
     }
 
     private void initColours(int x){
@@ -78,7 +67,7 @@ public class PieChartPanel extends PartialPanel {
         }
     }
     
-    public void open(ArrayList<Pair<String, Double>> data){
+    public void open(List<Pair<String, Double>> data){
         _closed = false;
 
         addData(data);
@@ -101,28 +90,25 @@ public class PieChartPanel extends PartialPanel {
         animation.setDuration(500);
         animation.setFillAfter(true);
         startAnimation(animation);
-
-//        removeView(relativeLayout);
-//        Handler h = new Handler();
-//        h.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                PieChartPanel.this.removeView(relativeLayout);
-//            }
-//        }, 500);
     }
 
-    public void addData(ArrayList<Pair<String, Double>> pairData){
+    public void addData(List<Pair<String, Double>> pairData){
         ArrayList<Entry> averageIndicater = new ArrayList<>();
         ArrayList<String> country = new ArrayList<>();
 
-        for (int i = 0; i < 5; i++) {
-            averageIndicater.add(new Entry(pairData.get(i).second.floatValue(), i));
-            country.add(pairData.get(i).first);
+        for (int i = 0; i < pairData.size(); i++) {
+            String countryName = pairData.get(i).first;
+            float value = pairData.get(i).second.floatValue();
+
+            if (Double.isNaN(value))
+                continue;
+
+            country.add(countryName);
+            averageIndicater.add(new Entry(value, i));
         }
 
         // creating PieDataset to hold the values
-        PieDataSet dataSet = new PieDataSet(averageIndicater, "Countries");
+        PieDataSet dataSet = new PieDataSet(averageIndicater, "");
         dataSet.setSelectionShift(5f);
         dataSet.setSliceSpace(0f);
         dataSet.setColors(colours);
