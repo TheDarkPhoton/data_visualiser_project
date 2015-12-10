@@ -5,6 +5,9 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+
+import com.darkphoton.data_visualiser_project.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,11 +17,13 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class JSONDownloader extends AsyncTask<ArrayList<String>, String, Void> {
+    private MainActivity _context;
     private ProgressDialog _progressDialog;
     private Cache _dataCache = new Cache();
     private DataJob _job;
 
-    public JSONDownloader(AppCompatActivity context, DataJob job){
+    public JSONDownloader(MainActivity context, DataJob job){
+        _context = context;
         _progressDialog = new ProgressDialog(context);
         _job = job;
     }
@@ -80,5 +85,9 @@ public class JSONDownloader extends AsyncTask<ArrayList<String>, String, Void> {
     protected void onPostExecute(Void aVoid) {
         _job.run(_dataCache);
         _progressDialog.dismiss();
+
+        View decorView = _context.getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 }

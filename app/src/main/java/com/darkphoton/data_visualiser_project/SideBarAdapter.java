@@ -23,6 +23,7 @@ import java.util.List;
 public class SideBarAdapter extends ArrayAdapter<PIndicatorGroup> {
     private Context _context;
     private boolean[] _on;
+
     public SideBarAdapter(Context context, int resource, List<PIndicatorGroup> objects) {
         super(context, resource, objects);
         _context = context;

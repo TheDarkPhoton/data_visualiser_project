@@ -9,12 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!--<Button-->
-            <!--android:id="@+id/asset_test"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textSize="100dp"-->
-            <!--android:text="@string/lithuania"/>-->
+        <HorizontalScrollView
+            android:id="@+id/country_list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>
 
         <include
             layout="@layout/side_bar" />

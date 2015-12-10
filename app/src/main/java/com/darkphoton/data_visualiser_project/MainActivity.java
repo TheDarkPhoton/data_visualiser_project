@@ -1,11 +1,16 @@
 package com.darkphoton.data_visualiser_project;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
+import android.view.View;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.darkphoton.data_visualiser_project.data.DataJob;
 import com.darkphoton.data_visualiser_project.data.Processor;
@@ -17,10 +22,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.jar.Manifest;
 
 public class MainActivity extends AppCompatActivity {
+    public static Point screen_size = new Point();
+
     private SideBarDrawer sideBar;
-    private CustomDrawer drawer;
+    private HorizontalScrollView countries;
 
     DataJob jsonJob = new DataJob() {
         @Override
@@ -28,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
             Processor data = new Processor(cache);
             data.normalize();
             data.reduceToTop(6);
-            drawer.updateData(data);
+            countries.removeAllViews();
+            countries.addView(new CountryList(MainActivity.this, data));
         }
     };
 
@@ -37,18 +46,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        Typeface font = Typeface.createFromAsset(getAssets(), "geobats.ttf");
-//        Button btn_test = (Button) findViewById(R.id.asset_test);
-//        btn_test.setTypeface(font);
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
 
-        ViewGroup layout = (ViewGroup) findViewById(R.id.drawer_layout);
-        drawer = new CustomDrawer(this);
-        drawer.setLayoutParams(
-                new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+        Display display = getWindowManager().getDefaultDisplay();
+        display.getSize(screen_size);
 
-        layout.addView(drawer, 0);
+        countries = (HorizontalScrollView) findViewById(R.id.country_list);
+        countries.addView(new CountryList(this));
+
+//        View item = LayoutInflater.from(layout.getContext()).inflate(R.layout.country_item, null);
+//        layout.addView(item, 0);
+//
+//        TextView textView = (TextView) item.findViewById(R.id.country_pos);
+//        textView.setBackgroundColor(Color.RED);
+//        _scrollView = (ScrollView) item.findViewById(R.id.indicator_items);
 
         sideBar = new SideBarDrawer(this);
 
