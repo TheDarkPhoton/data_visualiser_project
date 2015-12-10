@@ -1,4 +1,4 @@
-package com.darkphoton.data_visualiser_project;
+package com.darkphoton.data_visualiser_project.sidebar;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;
@@ -10,6 +10,8 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.darkphoton.data_visualiser_project.R;
 
 import java.lang.reflect.Field;
 import java.util.List;

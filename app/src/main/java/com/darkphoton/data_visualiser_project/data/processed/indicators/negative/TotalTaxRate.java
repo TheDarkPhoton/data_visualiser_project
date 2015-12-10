@@ -3,6 +3,8 @@ package com.darkphoton.data_visualiser_project.data.processed.indicators.negativ
 import com.darkphoton.data_visualiser_project.data.processed.indicators.NegativeIndicator;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
+import java.io.Serializable;
+
 public class TotalTaxRate extends NegativeIndicator {
     public final static String id = "IC.TAX.TOTL.CP.ZS";
     public final static String name = "Total Tax Rate";

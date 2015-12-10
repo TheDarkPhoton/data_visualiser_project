@@ -1,5 +1,6 @@
 package com.darkphoton.data_visualiser_project.data.processed;
 
+import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.CausesOfDeath;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.DieselPumpPrice;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.GINI;
 import com.darkphoton.data_visualiser_project.data.processed.indicators.negative.LongTermUnemploymentFemale;
@@ -32,13 +33,15 @@ import com.darkphoton.data_visualiser_project.data.processed.indicators.positive
 import com.darkphoton.data_visualiser_project.data.raw.RData;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
+import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class PIndicator {
+public abstract class PIndicator implements Serializable {
     public final static Map<String, Class> indicatorClasses;
     public final static List<PIndicatorGroup> indicatorGroups;
 
@@ -90,6 +93,7 @@ public abstract class PIndicator {
         other_map.put("SI.POV.GINI", GINI.class);
         other_map.put("IC.LGL.CRED.XQ", LegalRightsIndex.class);
         other_map.put("IS.RRS.PASG.KM", RailwayPassengersCarried.class);
+        other_map.put("SH.DTH.COMM.ZS", CausesOfDeath.class);
         indicators.add(new PIndicatorGroup("Other", other_map));
 
         indicatorGroups = Collections.unmodifiableList(indicators);
@@ -128,6 +132,10 @@ public abstract class PIndicator {
     }
 
     public abstract void normalize(double highest, double lowest);
+    public String getFormatedAverage(){
+        DecimalFormat form = new DecimalFormat("0.00");
+        return form.format(_average);
+    };
     public abstract String getId();
     public abstract String getName();
     public abstract String getTitle();

@@ -1,4 +1,4 @@
-package com.darkphoton.data_visualiser_project;
+package com.darkphoton.data_visualiser_project.sidebar;
 
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
@@ -8,9 +8,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.darkphoton.data_visualiser_project.MainActivity;
+import com.darkphoton.data_visualiser_project.R;
 import com.darkphoton.data_visualiser_project.data.JSONDownloader;
 import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
-import com.darkphoton.data_visualiser_project.data.processed.PIndicatorGroup;
 
 import java.util.ArrayList;
 import java.util.List;
