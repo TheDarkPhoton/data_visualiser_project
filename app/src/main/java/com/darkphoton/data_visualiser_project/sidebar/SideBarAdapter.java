@@ -1,4 +1,4 @@
-package com.darkphoton.data_visualiser_project;
+package com.darkphoton.data_visualiser_project.sidebar;
 
 import android.content.Context;
 import android.text.Layout;
@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 
+import com.darkphoton.data_visualiser_project.R;
 import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
 import com.darkphoton.data_visualiser_project.data.processed.PIndicatorGroup;
 
@@ -23,6 +24,7 @@ import java.util.List;
 public class SideBarAdapter extends ArrayAdapter<PIndicatorGroup> {
     private Context _context;
     private boolean[] _on;
+
     public SideBarAdapter(Context context, int resource, List<PIndicatorGroup> objects) {
         super(context, resource, objects);
         _context = context;

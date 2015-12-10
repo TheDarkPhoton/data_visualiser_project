@@ -1,15 +1,26 @@
 package com.darkphoton.data_visualiser_project;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
+import android.widget.RelativeLayout;
 
 import com.darkphoton.data_visualiser_project.data.DataJob;
 import com.darkphoton.data_visualiser_project.data.Processor;
 import com.darkphoton.data_visualiser_project.data.Cache;
+import com.darkphoton.data_visualiser_project.partials.CountryList;
+import com.darkphoton.data_visualiser_project.partials.InfoPartial;
+import com.darkphoton.data_visualiser_project.partials.LineGraphPanel;
+import com.darkphoton.data_visualiser_project.partials.PartialPanel;
+import com.darkphoton.data_visualiser_project.partials.PieChartPanel;
+import com.darkphoton.data_visualiser_project.sidebar.SideBarDrawer;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -19,16 +30,24 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private SideBarDrawer sideBar;
-    private TextView txtData;
+    public static Point screen_size = new Point();
+    public static InfoPartial infoPanel;
+    public static PieChartPanel pieChartPanel;
+    public static LineGraphPanel lineGraphPanel;
+    public static PartialPanel activePanel = null;
+    public static HorizontalScrollView countries;
 
-    DataJob jsonJob = new DataJob() {
+    private SideBarDrawer sideBar;
+
+
+    public DataJob jsonJob = new DataJob() {
         @Override
         public void run(Cache cache) {
             Processor data = new Processor(cache);
             data.normalize();
-            data.reduceToTop(5);
-            txtData.setText(data.toString());
+            data.reduceToTop(20);
+            countries.removeAllViews();
+            countries.addView(new CountryList(MainActivity.this, data));
         }
     };
 
@@ -37,7 +56,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        txtData = (TextView)findViewById(R.id.txtData);
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        display.getSize(screen_size);
+
+        countries = (HorizontalScrollView) findViewById(R.id.country_list);
+        countries.addView(new CountryList(this));
+        int index = ((ViewGroup) countries.getParent()).indexOfChild(countries) + 1;
+
+//        ViewGroup drawer = (ViewGroup) findViewById(R.id.drawer_layout);
+        ViewGroup drawer = (ViewGroup) findViewById(android.R.id.content);
+        infoPanel = new InfoPartial(this);
+        drawer.addView(infoPanel);
+        pieChartPanel = new PieChartPanel(this);
+        drawer.addView(pieChartPanel);
+        lineGraphPanel = new LineGraphPanel(this);
+        drawer.addView(lineGraphPanel);
+
         sideBar = new SideBarDrawer(this);
 
         /*Temporary test code, for everyone's benefit of understanding how the methods can be used.*/
@@ -97,6 +135,15 @@ public class MainActivity extends AppCompatActivity {
             sum+=Integer.parseInt(s);
         }
         return sum/inputArray.size()+"%";
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (activePanel != null) {
+            activePanel.close();
+            activePanel = null;
+            MainActivity.countries.setEnabled(true);
+        }
     }
 
     @Override
