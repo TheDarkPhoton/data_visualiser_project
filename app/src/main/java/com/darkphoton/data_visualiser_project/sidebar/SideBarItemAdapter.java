@@ -14,16 +14,30 @@ import android.widget.TextView;
 import com.darkphoton.data_visualiser_project.R;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
 
 public class SideBarItemAdapter extends ArrayAdapter<Class> {
+    public static HashMap<String, Integer> sliders = new HashMap<>();
+
     private boolean[] _checkboxes;
-    private int[] _sliders;
+//    private int[] _sliders;
 
     public SideBarItemAdapter(Context context, int resource, List<Class> items) {
         super(context, resource, items);
         _checkboxes = new boolean[items.size()];
-        _sliders = new int[items.size()];
+//        _sliders = new int[items.size()];
+
+        try {
+            for (Class item : items) {
+                Field id = item.getField("id");
+                sliders.put((String) id.get(null), 0);
+            }
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -34,7 +48,7 @@ public class SideBarItemAdapter extends ArrayAdapter<Class> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.side_bar_sub_item, parent, false);
         }
 
-        TextView item_id = (TextView) convertView.findViewById(R.id.item_id);
+        final TextView item_id = (TextView) convertView.findViewById(R.id.item_id);
         CheckBox checkbox = (CheckBox) convertView.findViewById(R.id.item_checkbox);
 
         try {
@@ -82,11 +96,11 @@ public class SideBarItemAdapter extends ArrayAdapter<Class> {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                _sliders[position] = seekBar.getProgress();
+                sliders.put(item_id.getText().toString(), seekBar.getProgress());
             }
         });
 
-        seekbar.setProgress(_sliders[position]);
+        seekbar.setProgress(sliders.get(item_id.getText().toString()));
         checkbox.setChecked(_checkboxes[position]);
 
         return convertView;
