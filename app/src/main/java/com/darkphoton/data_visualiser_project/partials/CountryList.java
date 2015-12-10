@@ -2,10 +2,13 @@ package com.darkphoton.data_visualiser_project.partials;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.darkphoton.data_visualiser_project.MainActivity;
+import com.darkphoton.data_visualiser_project.R;
 import com.darkphoton.data_visualiser_project.data.Processor;
 
 /**
@@ -16,10 +19,19 @@ public class CountryList extends LinearLayout {
 
     public CountryList(Context context) {
         super(context);
-
-        setLayoutParams(new ViewGroup.LayoutParams(size.x, size.y));
+        final Drawable img = ContextCompat.getDrawable(context, R.drawable.helpmenu);
+//        setLayoutParams(new ViewGroup.LayoutParams(size.x, size.y));
         setOrientation(LinearLayout.HORIZONTAL);
+        ViewGroup background = new ViewGroup(context) {
+            @Override
+            protected void onLayout(boolean changed, int l, int t, int r, int b) {
+                setBackground(img);
+            }
+        };
+        background.setLayoutParams(new ViewGroup.LayoutParams(size.x, size.y));
+        addView(background);
     }
+
 
     public CountryList(Context context, Processor data) {
         super(context);
