@@ -20,10 +20,12 @@ import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
  */
 public class IndicatorItem extends RelativeLayout {
     private Point size = MainActivity.screen_size;
+    private PIndicator _indicator;
 
     public IndicatorItem(Context context, PIndicator indicator) {
         super(context);
 
+        _indicator = indicator;
         setLayoutParams(new LayoutParams(size.x / 2, size.y));
         setBackgroundColor(CountryItem.transparent_colours.get(4));
 
@@ -112,7 +114,7 @@ public class IndicatorItem extends RelativeLayout {
             Log.i("INFO LISTENER", "Pressed");
             if (MainActivity.activePanel == null) {
                 MainActivity.countries.setEnabled(false);
-                MainActivity.infoPanel.open();
+                MainActivity.infoPanel.open(_indicator);
                 MainActivity.activePanel = MainActivity.infoPanel;
             }
         }
