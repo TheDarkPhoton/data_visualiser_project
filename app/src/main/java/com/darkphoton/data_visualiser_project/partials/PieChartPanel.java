@@ -3,6 +3,7 @@ package com.darkphoton.data_visualiser_project.partials;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -13,13 +14,17 @@ import android.widget.RelativeLayout;
 import com.darkphoton.data_visualiser_project.MainActivity;
 import com.darkphoton.data_visualiser_project.R;
 import com.darkphoton.data_visualiser_project.data.processed.PCountry;
+import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,18 +36,18 @@ public class PieChartPanel extends PartialPanel {
     private PieChart pieChart;
     private ArrayList<Entry> averageIndicater;
     private ArrayList<String> country;
-
+    private RelativeLayout relativeLayout;
 
     public PieChartPanel(Context context) {
         super(context);
         setLayoutParams(new LayoutParams(size.x, size.y));
-        setBackgroundColor(Color.GREEN);
+        setBackgroundColor(Color.WHITE);
         setGravity(Gravity.CENTER);
         setY(-size.y);
-        RelativeLayout relativeLayout = new RelativeLayout(context);
+        relativeLayout = new RelativeLayout(context);
         relativeLayout.setLayoutParams(
                 new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        addView(relativeLayout);
+
 
         pieChart = new PieChart(context);
         pieChart.setLayoutParams(
@@ -52,14 +57,23 @@ public class PieChartPanel extends PartialPanel {
         pieChart.setHoleRadius(15f);
         pieChart.setHoleColorTransparent(true);
         pieChart.setTransparentCircleRadius(15f);
-        pieChart.setDescription("testing pie chart");
-
+        pieChart.setDrawSliceText(false);
         relativeLayout.addView(pieChart);
+
+
+        Legend l = pieChart.getLegend();
+        l.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
+        l.setXEntrySpace(0);
+        l.setYEntrySpace(0);
+
     }
 
-    public void open(ArrayList<Pair<String, Float>> data) {
+    public void open(ArrayList<Pair<String, Float>> data, PIndicator indicator) {
         addData(data);
         pieChart.invalidate();
+        pieChart.setDescription(indicator.getTitle());
+        pieChart.setDescriptionTextSize(30);
+        addView(relativeLayout);
         setY(-size.y);
         TranslateAnimation animation = new TranslateAnimation(0, 0, 0, size.y);
         animation.setInterpolator(new DecelerateInterpolator(1.5f));
@@ -76,7 +90,7 @@ public class PieChartPanel extends PartialPanel {
         animation.setDuration(500);
         animation.setFillAfter(true);
         startAnimation(animation);
-
+        removeAllViews();
     }
 
     public void addData(ArrayList<Pair<String, Float>> dataP) {
@@ -85,12 +99,17 @@ public class PieChartPanel extends PartialPanel {
 
         averageIndicater = new ArrayList<>();
         for (int i = 0; i < dataP.size(); i++) {
-            averageIndicater.add(new Entry(dataP.get(i).second, i));
+            if(!dataP.get(i).second.toString().equals("NaN")){
+                averageIndicater.add(new Entry(dataP.get(i).second, i));
+                Log.d("values",""+dataP.get(i).second);
+            }
         }
 
         country = new ArrayList<>();
         for (int i = 0; i < dataP.size(); i++) {
-            country.add(dataP.get(i).first);
+            if(!dataP.get(i).second.toString().equals("NaN")) {
+                country.add(dataP.get(i).first);
+            }
         }
 
         // arraylist to contain colors for each section of piechart
@@ -136,7 +155,6 @@ public class PieChartPanel extends PartialPanel {
             pieChart.setData(data);
 
         }
-
 
     }
 

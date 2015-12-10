@@ -157,7 +157,7 @@ public class IndicatorItem extends RelativeLayout {
             Log.i("PIE LISTENER", "Pressed");
             if (MainActivity.activePanel == null) {
                 MainActivity.countries.setEnabled(false);
-                MainActivity.pieChartPanel.open(getPieChartData());
+                MainActivity.pieChartPanel.open(getPieChartData(),_indicator);
                 MainActivity.activePanel = MainActivity.pieChartPanel;
             }
 
