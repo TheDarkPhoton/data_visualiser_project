@@ -64,22 +64,8 @@ public class SideBarItemAdapter extends ArrayAdapter<Class> {
         final LinearLayout seeker_layout = (LinearLayout) convertView.findViewById(R.id.slider_layout);
         final ViewGroup.LayoutParams params = seeker_layout.getLayoutParams();
 
-        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                _checkboxes[position] = isChecked;
-
-                if (isChecked){
-                    seeker_layout.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                } else {
-                    params.height = 0;
-                }
-                seeker_layout.requestLayout();
-            }
-        });
-
         final TextView slider_value = (TextView) convertView.findViewById(R.id.slider_value);
-        SeekBar seekbar = (SeekBar) convertView.findViewById(R.id.item_slider);
+        final SeekBar seekbar = (SeekBar) convertView.findViewById(R.id.item_slider);
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -94,6 +80,22 @@ public class SideBarItemAdapter extends ArrayAdapter<Class> {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 sliders.put(item_id.getText().toString(), seekBar.getProgress());
+            }
+        });
+
+        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                _checkboxes[position] = isChecked;
+
+                seekbar.setProgress(100);
+
+                if (isChecked) {
+                    seeker_layout.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                } else {
+                    params.height = 0;
+                }
+                seeker_layout.requestLayout();
             }
         });
 
