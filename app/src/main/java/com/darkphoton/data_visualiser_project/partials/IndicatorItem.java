@@ -129,6 +129,8 @@ public class IndicatorItem extends RelativeLayout {
                 MainActivity.pieChartPanel.open();
                 MainActivity.activePanel = MainActivity.pieChartPanel;
             }
+
+
         }
     };
 
