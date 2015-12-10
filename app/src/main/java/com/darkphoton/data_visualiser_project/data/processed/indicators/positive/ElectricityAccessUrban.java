@@ -3,6 +3,8 @@ package com.darkphoton.data_visualiser_project.data.processed.indicators.positiv
 import com.darkphoton.data_visualiser_project.data.processed.indicators.PositiveIndicator;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
+import java.io.Serializable;
+
 public class ElectricityAccessUrban extends PositiveIndicator {
     public final static String id = "EG.ELC.ACCS.UR.ZS";
     public final static String name = "Electricity Access - Urban";

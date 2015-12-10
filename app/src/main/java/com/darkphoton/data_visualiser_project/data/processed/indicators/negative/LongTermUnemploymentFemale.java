@@ -3,6 +3,8 @@ package com.darkphoton.data_visualiser_project.data.processed.indicators.negativ
 import com.darkphoton.data_visualiser_project.data.processed.indicators.NegativeIndicator;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
+import java.io.Serializable;
+
 public class LongTermUnemploymentFemale extends NegativeIndicator {
     public final static String id = "SL.UEM.LTRM.FE.ZS";
     public final static String name = "Long Term Unemployment - Female";

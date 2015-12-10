@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.darkphoton.data_visualiser_project.MainActivity;
+import com.darkphoton.data_visualiser_project.data.Processor;
 import com.darkphoton.data_visualiser_project.data.processed.PCountry;
 import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
 
@@ -15,14 +16,14 @@ import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
 public class IndicatorList extends LinearLayout {
     private Point size = MainActivity.screen_size;
 
-    public IndicatorList(Context context, PCountry country) {
+    public IndicatorList(Context context, Processor data, PCountry country) {
         super(context);
 
         setLayoutParams(new ViewGroup.LayoutParams(size.x / 2, ViewGroup.LayoutParams.WRAP_CONTENT));
         setOrientation(LinearLayout.VERTICAL);
 
         for (PIndicator indicator : country.getIndicators().values()) {
-            addView(new IndicatorItem(context, indicator));
+            addView(new IndicatorItem(context, data, country, indicator));
         }
     }
 }

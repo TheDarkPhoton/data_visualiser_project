@@ -33,6 +33,7 @@ import com.darkphoton.data_visualiser_project.data.processed.indicators.positive
 import com.darkphoton.data_visualiser_project.data.raw.RData;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class PIndicator {
+public abstract class PIndicator implements Serializable {
     public final static Map<String, Class> indicatorClasses;
     public final static List<PIndicatorGroup> indicatorGroups;
 

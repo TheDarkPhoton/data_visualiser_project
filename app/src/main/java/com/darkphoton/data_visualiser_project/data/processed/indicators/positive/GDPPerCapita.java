@@ -3,6 +3,8 @@ package com.darkphoton.data_visualiser_project.data.processed.indicators.positiv
 import com.darkphoton.data_visualiser_project.data.processed.indicators.PositiveIndicator;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
+import java.io.Serializable;
+
 public class GDPPerCapita extends PositiveIndicator {
     public final static String id = "NY.GDP.PCAP.CD";
     public final static String name = "GDP Per Capita";

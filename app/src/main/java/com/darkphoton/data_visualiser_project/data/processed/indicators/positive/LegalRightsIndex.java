@@ -3,6 +3,8 @@ package com.darkphoton.data_visualiser_project.data.processed.indicators.positiv
 import com.darkphoton.data_visualiser_project.data.processed.indicators.PositiveIndicator;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
+import java.io.Serializable;
+
 public class LegalRightsIndex extends PositiveIndicator {
     public final static String id = "IC.LGL.CRED.XQ";
     public final static String name = "Legal Rights Index";
