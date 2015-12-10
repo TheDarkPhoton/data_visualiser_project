@@ -53,6 +53,8 @@ public class InfoPartial extends PartialPanel {
     }
 
     public void open(PIndicator indicator){
+        _closed = false;
+
         title.setText(indicator.getTitle());
         description.setText(indicator.getDescription());
 
@@ -65,6 +67,8 @@ public class InfoPartial extends PartialPanel {
     }
 
     public void close(){
+        _closed = true;
+
         setX(size.x / 2);
         TranslateAnimation animation = new TranslateAnimation(0, size.x - (size.x / 2), 0, 0);
         animation.setInterpolator(new DecelerateInterpolator(1.5f));
