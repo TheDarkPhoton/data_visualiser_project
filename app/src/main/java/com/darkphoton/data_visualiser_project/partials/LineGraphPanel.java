@@ -3,8 +3,6 @@ package com.darkphoton.data_visualiser_project.partials;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.os.DropBoxManager;
-import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -26,6 +24,8 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by darkphoton on 10/12/15.
@@ -48,6 +48,7 @@ public class LineGraphPanel extends PartialPanel {
         setBackgroundColor(Color.WHITE);
         setY(size.y);
         setGravity(Gravity.CENTER);
+
         RelativeLayout relativeLayout= new RelativeLayout(context);
         relativeLayout.setLayoutParams(
                 new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -108,9 +109,6 @@ public class LineGraphPanel extends PartialPanel {
         yAxisr.setEnabled(false);
     }
 
-
-
-
     public void open(Pair<String, RIndicator> data){
         setDataValues(data);
         lineChart.invalidate();
@@ -137,22 +135,23 @@ public class LineGraphPanel extends PartialPanel {
         RIndicator indicator = rData.second;
         indicName =  "";
 
+        ArrayList<RData> tempData = new ArrayList<>(indicator.getData().values());
+        Collections.sort(tempData, new Comparator<RData>() {
+            @Override
+            public int compare(RData lhs, RData rhs) {
+                return lhs.getDate().compareTo(rhs.getDate());
+            }
+        });
+
         xVals = new ArrayList<>();
-        for (int i = 0; i < indicator.getData().size(); i++) {
-            if(indicator.getData().get(i)!=null) {
-                    xVals.add(indicator.getData().get(i).getDate());
-                    Log.d("test", "" + indicator.getData().get(i).isValid());
-            }
-        }
-
-
-
         yVals = new ArrayList<>();
+        for (int i = 0; i < tempData.size(); i++) {
+            RData d = tempData.get(i);
+            if (!d.isValid())
+                continue;
 
-        for (int i = 0; i < indicator.getData().size(); i++) {
-            if ( indicator.getData().get(i) != null) {
-                yVals.add(new Entry((float) indicator.getData().get(i).getValue(), i));
-            }
+            xVals.add(d.getDate());
+            yVals.add(new Entry((float) d.getValue(), i));
         }
 
         LineDataSet set1 = new LineDataSet(yVals, indicName);
@@ -174,13 +173,4 @@ public class LineGraphPanel extends PartialPanel {
         data.setValueTextSize(9f);
         lineChart.setData(data);
     }
-
-
-
-
-
-
-
-
-
 }
