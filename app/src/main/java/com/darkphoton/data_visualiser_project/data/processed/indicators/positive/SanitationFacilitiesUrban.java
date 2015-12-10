@@ -3,6 +3,8 @@ package com.darkphoton.data_visualiser_project.data.processed.indicators.positiv
 import com.darkphoton.data_visualiser_project.data.processed.indicators.PositiveIndicator;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
+import java.io.Serializable;
+
 public class SanitationFacilitiesUrban extends PositiveIndicator {
     public final static String id = "SH.STA.ACSN.UR";
     public final static String name = "Improved Sanitation Facilities - Urban";

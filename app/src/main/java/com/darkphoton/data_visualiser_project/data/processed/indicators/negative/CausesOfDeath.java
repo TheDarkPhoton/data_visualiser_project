@@ -3,6 +3,8 @@ package com.darkphoton.data_visualiser_project.data.processed.indicators.negativ
 import com.darkphoton.data_visualiser_project.data.processed.indicators.NegativeIndicator;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
+import java.io.Serializable;
+
 public class CausesOfDeath extends NegativeIndicator {
     public final static String id = "SH.DTH.COMM.ZS";
     public final static String name = "Causes of Death";

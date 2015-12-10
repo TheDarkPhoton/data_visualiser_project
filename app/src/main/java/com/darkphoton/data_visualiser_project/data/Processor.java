@@ -1,9 +1,20 @@
 package com.darkphoton.data_visualiser_project.data;
 
+import android.content.Context;
+
 import com.darkphoton.data_visualiser_project.data.processed.PCountry;
 import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
 import com.darkphoton.data_visualiser_project.data.raw.RCountry;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
+import java.io.Serializable;
+import java.io.StreamCorruptedException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,8 +22,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class Processor {
-    private List<PCountry> _countries = new ArrayList<>();
+public class Processor implements Serializable {
+    private ArrayList<PCountry> _countries = new ArrayList<PCountry>();
 
     private final static DecimalFormat nf = new DecimalFormat("#.##");
 
@@ -34,7 +45,7 @@ public class Processor {
             }
         });
 
-        _countries = _countries.subList(0, (count > 1) ? count : 1);
+        _countries = new ArrayList<>(_countries.subList(0, (count > 1) ? count : 1));
     }
 
     public void normalize(){
@@ -69,6 +80,43 @@ public class Processor {
 
     public List<PCountry> getCountries(){
         return _countries;
+    }
+
+    public static Processor deSerialize(Context context){
+        Processor processor = null;
+        try {
+            FileInputStream fis = context.openFileInput("processed_data.dat");
+            ObjectInputStream is = new ObjectInputStream(fis);
+            processor = (Processor) is.readObject();
+            is.close();
+            fis.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (OptionalDataException e) {
+            e.printStackTrace();
+        } catch (StreamCorruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return processor;
+    }
+
+    public static void serialize(Context context, Processor processor){
+        try {
+            FileOutputStream fos = context.openFileOutput("processed_data.dat", Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(processor);
+            os.close();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

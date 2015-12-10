@@ -1,15 +1,17 @@
 package com.darkphoton.data_visualiser_project.data.processed;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.darkphoton.data_visualiser_project.data.raw.RCountry;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
-public class PCountry {
-    private HashMap<String, PIndicator> _indicators = new HashMap<>();
+public class PCountry implements Serializable {
+    private HashMap<String, PIndicator> _indicators = new HashMap<String, PIndicator>();
     private String _id;
     private String _name;
     private double _value = 0;

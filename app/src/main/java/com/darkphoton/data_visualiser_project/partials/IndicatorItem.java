@@ -5,6 +5,7 @@ import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,19 +14,31 @@ import android.widget.TextView;
 
 import com.darkphoton.data_visualiser_project.MainActivity;
 import com.darkphoton.data_visualiser_project.R;
+import com.darkphoton.data_visualiser_project.data.Processor;
+import com.darkphoton.data_visualiser_project.data.processed.PCountry;
 import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
+import com.darkphoton.data_visualiser_project.data.raw.RCountry;
+import com.darkphoton.data_visualiser_project.data.raw.RData;
+import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
+
+import java.util.ArrayList;
 
 /**
  * Created by darkphoton on 10/12/15.
  */
 public class IndicatorItem extends RelativeLayout {
     private Point size = MainActivity.screen_size;
+    private Processor _data;
+    private PCountry _country;
     private PIndicator _indicator;
 
-    public IndicatorItem(Context context, PIndicator indicator) {
+    public IndicatorItem(Context context, Processor data, PCountry country, PIndicator indicator) {
         super(context);
 
+        _data = data;
+        _country = country;
         _indicator = indicator;
+
         setLayoutParams(new LayoutParams(size.x / 2, size.y));
         setBackgroundColor(CountryItem.transparent_colours.get(4));
 
@@ -108,6 +121,25 @@ public class IndicatorItem extends RelativeLayout {
         lineLayout.addView(line);
     }
 
+    private ArrayList<Pair<String, Double>> getPieChartData(){
+        ArrayList<Pair<String, Double>> data = new ArrayList<>();
+
+        for (PCountry country : _data.getCountries()) {
+            PIndicator indicator = country.getIndicator(_indicator.getId());
+            Pair<String, Double> d = new Pair<>(country.getName(), indicator.getAverage());
+            data.add(d);
+        }
+
+        return data;
+    }
+
+    private Pair<String, RIndicator> getLineChartData(){
+        RCountry country = MainActivity.rowData.getCountries().get(_country.getId());
+        RIndicator indicator = country.getIndicators().get(_indicator.getId());
+
+        return new Pair<>(_country.getName(), indicator);
+    }
+
     private OnClickListener _infoListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -126,9 +158,11 @@ public class IndicatorItem extends RelativeLayout {
             Log.i("PIE LISTENER", "Pressed");
             if (MainActivity.activePanel == null) {
                 MainActivity.countries.setEnabled(false);
-                MainActivity.pieChartPanel.open();
+                MainActivity.pieChartPanel.open(getPieChartData());
                 MainActivity.activePanel = MainActivity.pieChartPanel;
             }
+
+
         }
     };
 
@@ -138,7 +172,7 @@ public class IndicatorItem extends RelativeLayout {
             Log.i("LINE LISTENER", "Pressed");
             if (MainActivity.activePanel == null) {
                 MainActivity.countries.setEnabled(false);
-                MainActivity.lineGraphPanel.open();
+                MainActivity.lineGraphPanel.open(getLineChartData());
                 MainActivity.activePanel = MainActivity.lineGraphPanel;
             }
         }
