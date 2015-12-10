@@ -19,14 +19,11 @@ import java.util.List;
 
 public class SideBarItemAdapter extends ArrayAdapter<Class> {
     public static HashMap<String, Integer> sliders = new HashMap<>();
-
     private boolean[] _checkboxes;
-//    private int[] _sliders;
 
     public SideBarItemAdapter(Context context, int resource, List<Class> items) {
         super(context, resource, items);
         _checkboxes = new boolean[items.size()];
-//        _sliders = new int[items.size()];
 
         try {
             for (Class item : items) {
