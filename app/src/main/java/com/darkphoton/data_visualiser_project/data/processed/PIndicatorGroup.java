@@ -1,9 +1,10 @@
 package com.darkphoton.data_visualiser_project.data.processed;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PIndicatorGroup {
+public class PIndicatorGroup implements Serializable {
     private String _name;
     private Map<String, Class> _indicators;
 

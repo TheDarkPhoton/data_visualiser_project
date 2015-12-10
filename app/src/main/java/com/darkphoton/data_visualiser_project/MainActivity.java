@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
-import android.widget.RelativeLayout;
 
 import com.darkphoton.data_visualiser_project.data.DataJob;
 import com.darkphoton.data_visualiser_project.data.Processor;
@@ -36,16 +35,21 @@ public class MainActivity extends AppCompatActivity {
     public static LineGraphPanel lineGraphPanel;
     public static PartialPanel activePanel = null;
     public static HorizontalScrollView countries;
+    public static Cache rowData;
 
     private SideBarDrawer sideBar;
 
+    private Processor data;
 
     public DataJob jsonJob = new DataJob() {
         @Override
         public void run(Cache cache) {
-            Processor data = new Processor(cache);
+            rowData = cache;
+            data = new Processor(cache);
             data.normalize();
             data.reduceToTop(20);
+            Processor.serialize(MainActivity.this, data);
+
             countries.removeAllViews();
             countries.addView(new CountryList(MainActivity.this, data));
         }
@@ -78,14 +82,11 @@ public class MainActivity extends AppCompatActivity {
 
         sideBar = new SideBarDrawer(this);
 
-        /*Temporary test code, for everyone's benefit of understanding how the methods can be used.*/
-        ArrayList testArraylist = new ArrayList();
-        testArraylist.add("Bob");
-        serialize(testArraylist, "testArrayList");
-
-        ArrayList reconstructedArrayList = (ArrayList) deserialize("testArrayList");
-        System.out.println(reconstructedArrayList.get(0));
-        /*End of test code*/
+        data = Processor.deSerialize(this);
+        if (data != null) {
+            countries.removeAllViews();
+            countries.addView(new CountryList(this, data));
+        }
     }
 
     /*This method will serialize the given object with the given filename in the /files directory

@@ -3,6 +3,8 @@ package com.darkphoton.data_visualiser_project.data.processed.indicators.positiv
 import com.darkphoton.data_visualiser_project.data.processed.indicators.PositiveIndicator;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
+import java.io.Serializable;
+
 public class WaterSourcesUrban extends PositiveIndicator {
     public final static String id = "SH.H2O.SAFE.UR.ZS";
     public final static String name = "Improved Water Sources - Urban";
