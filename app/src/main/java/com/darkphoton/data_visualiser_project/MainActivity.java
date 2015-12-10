@@ -82,11 +82,11 @@ public class MainActivity extends AppCompatActivity {
 
         sideBar = new SideBarDrawer(this);
 
-        data = Processor.deSerialize(this);
-        if (data != null) {
-            countries.removeAllViews();
-            countries.addView(new CountryList(this, data));
-        }
+//        data = Processor.deSerialize(this);
+//        if (data != null) {
+//            countries.removeAllViews();
+//            countries.addView(new CountryList(this, data));
+//        }
     }
 
     /*This method will serialize the given object with the given filename in the /files directory
