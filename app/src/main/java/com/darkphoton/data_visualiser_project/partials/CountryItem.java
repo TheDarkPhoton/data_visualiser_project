@@ -11,6 +11,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.darkphoton.data_visualiser_project.MainActivity;
+import com.darkphoton.data_visualiser_project.data.Processor;
 import com.darkphoton.data_visualiser_project.data.processed.PCountry;
 
 import java.util.ArrayList;
@@ -45,8 +46,10 @@ public class CountryItem extends RelativeLayout {
 
     private Point size = MainActivity.screen_size;
 
-    public CountryItem(Context context, PCountry country, int pos) {
+    public CountryItem(Context context, Processor data, int pos) {
         super(context);
+
+        PCountry country = data.getCountries().get(pos);
 
         setLayoutParams(new LinearLayout.LayoutParams(size.x, LinearLayout.LayoutParams.MATCH_PARENT));
 
@@ -81,7 +84,7 @@ public class CountryItem extends RelativeLayout {
         verticalScroll.setX(size.x / 2);
         addView(verticalScroll);
 
-        verticalScroll.addView(new IndicatorList(context, country));
+        verticalScroll.addView(new IndicatorList(context, data, country));
 
 //        verticalScroll.postDelayed(new Runnable() {
 //            @Override

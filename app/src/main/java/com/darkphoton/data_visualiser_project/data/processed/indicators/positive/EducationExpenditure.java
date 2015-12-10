@@ -3,6 +3,8 @@ package com.darkphoton.data_visualiser_project.data.processed.indicators.positiv
 import com.darkphoton.data_visualiser_project.data.processed.indicators.PositiveIndicator;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
+import java.io.Serializable;
+
 public class EducationExpenditure extends PositiveIndicator {
     public final static String id = "SE.XPD.TOTL.GD.ZS";
     public final static String name = "Education Expenditure";

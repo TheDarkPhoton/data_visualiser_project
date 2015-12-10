@@ -3,6 +3,8 @@ package com.darkphoton.data_visualiser_project.data.processed.indicators.negativ
 import com.darkphoton.data_visualiser_project.data.processed.indicators.NegativeIndicator;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
+import java.io.Serializable;
+
 public class PollutionMeanAnnualExposure extends NegativeIndicator {
     public final static String id = "EN.ATM.PM25.MC.M3";
     public final static String name = "Pollution Mean Annual Exposure";

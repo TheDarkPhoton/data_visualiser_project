@@ -3,6 +3,8 @@ package com.darkphoton.data_visualiser_project.data.processed.indicators.negativ
 import com.darkphoton.data_visualiser_project.data.processed.indicators.NegativeIndicator;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
+import java.io.Serializable;
+
 public class PollutionDensity extends NegativeIndicator {
     public final static String id = "EN.POP.DNST";
     public final static String name = "Pollution Density";
