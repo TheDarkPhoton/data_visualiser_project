@@ -1,4 +1,4 @@
-package com.darkphoton.data_visualiser_project;
+package com.darkphoton.data_visualiser_project.partials;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.darkphoton.data_visualiser_project.MainActivity;
 import com.darkphoton.data_visualiser_project.data.processed.PCountry;
 
 import java.util.ArrayList;

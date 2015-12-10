@@ -8,11 +8,19 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
+import android.widget.RelativeLayout;
 
 import com.darkphoton.data_visualiser_project.data.DataJob;
 import com.darkphoton.data_visualiser_project.data.Processor;
 import com.darkphoton.data_visualiser_project.data.Cache;
+import com.darkphoton.data_visualiser_project.partials.CountryList;
+import com.darkphoton.data_visualiser_project.partials.InfoPartial;
+import com.darkphoton.data_visualiser_project.partials.LineGraphPanel;
+import com.darkphoton.data_visualiser_project.partials.PartialPanel;
+import com.darkphoton.data_visualiser_project.partials.PieChartPanel;
+import com.darkphoton.data_visualiser_project.sidebar.SideBarDrawer;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -23,11 +31,16 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     public static Point screen_size = new Point();
+    public static InfoPartial infoPanel;
+    public static PieChartPanel pieChartPanel;
+    public static LineGraphPanel lineGraphPanel;
+    public static PartialPanel activePanel = null;
+    public static HorizontalScrollView countries;
 
     private SideBarDrawer sideBar;
-    private HorizontalScrollView countries;
 
-    DataJob jsonJob = new DataJob() {
+
+    public DataJob jsonJob = new DataJob() {
         @Override
         public void run(Cache cache) {
             Processor data = new Processor(cache);
@@ -52,6 +65,16 @@ public class MainActivity extends AppCompatActivity {
 
         countries = (HorizontalScrollView) findViewById(R.id.country_list);
         countries.addView(new CountryList(this));
+        int index = ((ViewGroup) countries.getParent()).indexOfChild(countries) + 1;
+
+//        ViewGroup drawer = (ViewGroup) findViewById(R.id.drawer_layout);
+        ViewGroup drawer = (ViewGroup) findViewById(android.R.id.content);
+        infoPanel = new InfoPartial(this);
+        drawer.addView(infoPanel);
+        pieChartPanel = new PieChartPanel(this);
+        drawer.addView(pieChartPanel);
+        lineGraphPanel = new LineGraphPanel(this);
+        drawer.addView(lineGraphPanel);
 
         sideBar = new SideBarDrawer(this);
 
@@ -112,6 +135,15 @@ public class MainActivity extends AppCompatActivity {
             sum+=Integer.parseInt(s);
         }
         return sum/inputArray.size()+"%";
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (activePanel != null) {
+            activePanel.close();
+            activePanel = null;
+            MainActivity.countries.setEnabled(true);
+        }
     }
 
     @Override

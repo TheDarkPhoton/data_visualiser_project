@@ -33,6 +33,7 @@ import com.darkphoton.data_visualiser_project.data.processed.indicators.positive
 import com.darkphoton.data_visualiser_project.data.raw.RData;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -130,6 +131,10 @@ public abstract class PIndicator {
     }
 
     public abstract void normalize(double highest, double lowest);
+    public String getFormatedAverage(){
+        DecimalFormat form = new DecimalFormat("0.00");
+        return form.format(_average);
+    };
     public abstract String getId();
     public abstract String getName();
     public abstract String getTitle();

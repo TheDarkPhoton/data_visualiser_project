@@ -1,15 +1,18 @@
-package com.darkphoton.data_visualiser_project;
+package com.darkphoton.data_visualiser_project.partials;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.darkphoton.data_visualiser_project.MainActivity;
+import com.darkphoton.data_visualiser_project.R;
 import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
 
 /**
@@ -20,7 +23,6 @@ public class IndicatorItem extends RelativeLayout {
 
     public IndicatorItem(Context context, PIndicator indicator) {
         super(context);
-
 
         setLayoutParams(new LayoutParams(size.x / 2, size.y));
         setBackgroundColor(CountryItem.transparent_colours.get(4));
@@ -37,7 +39,7 @@ public class IndicatorItem extends RelativeLayout {
         TextView average = new TextView(context);
         average.setLayoutParams(new ViewGroup.LayoutParams(size.x / 2, size.y / 3));
         average.setGravity(Gravity.CENTER);
-        average.setText("5 Year Average: " + indicator.getAverage());
+        average.setText("5 Year Average: " + indicator.getFormatedAverage());
         average.setTextSize(size.y / 40);
         average.setY(size.y / 3);
         addView(average);
@@ -78,9 +80,9 @@ public class IndicatorItem extends RelativeLayout {
         info.setTypeface(font);
         info.setTextSize(diameter * 0.2f);
         info.setGravity(Gravity.CENTER);
-//        info.setTextColor(CountryItem.colours.get(3));
         info.setBackground(ContextCompat.getDrawable(context, R.drawable.circle));
         info.setText(context.getResources().getString(R.string.information));
+        info.setOnClickListener(_infoListener);
         infoLayout.addView(info);
 
         TextView pie = new TextView(context);
@@ -88,9 +90,9 @@ public class IndicatorItem extends RelativeLayout {
         pie.setTypeface(font);
         pie.setTextSize(diameter * 0.2f);
         pie.setGravity(Gravity.CENTER);
-//        pie.setTextColor(CountryItem.colours.get(3));
         pie.setBackground(ContextCompat.getDrawable(context, R.drawable.circle));
         pie.setText(context.getResources().getString(R.string.pie_chart));
+        pie.setOnClickListener(_pieListener);
         pieLayout.addView(pie);
 
         TextView line = new TextView(context);
@@ -98,9 +100,45 @@ public class IndicatorItem extends RelativeLayout {
         line.setTypeface(font);
         line.setTextSize(diameter * 0.2f);
         line.setGravity(Gravity.CENTER);
-//        line.setTextColor(CountryItem.colours.get(3));
         line.setBackground(ContextCompat.getDrawable(context, R.drawable.circle));
         line.setText(context.getResources().getString(R.string.line_chart));
+        line.setOnClickListener(_lineListener);
         lineLayout.addView(line);
     }
+
+    private OnClickListener _infoListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Log.i("INFO LISTENER", "Pressed");
+            if (MainActivity.activePanel == null) {
+                MainActivity.countries.setEnabled(false);
+                MainActivity.infoPanel.open();
+                MainActivity.activePanel = MainActivity.infoPanel;
+            }
+        }
+    };
+
+    private OnClickListener _pieListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Log.i("PIE LISTENER", "Pressed");
+            if (MainActivity.activePanel == null) {
+                MainActivity.countries.setEnabled(false);
+                MainActivity.pieChartPanel.open();
+                MainActivity.activePanel = MainActivity.pieChartPanel;
+            }
+        }
+    };
+
+    private OnClickListener _lineListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Log.i("LINE LISTENER", "Pressed");
+            if (MainActivity.activePanel == null) {
+                MainActivity.countries.setEnabled(false);
+                MainActivity.lineGraphPanel.open();
+                MainActivity.activePanel = MainActivity.lineGraphPanel;
+            }
+        }
+    };
 }
