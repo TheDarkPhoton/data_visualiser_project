@@ -28,7 +28,7 @@ public class CountryList extends LinearLayout {
         setOrientation(LinearLayout.HORIZONTAL);
 
         for (int i = 0; i < data.getCountries().size(); i++) {
-            addView(new CountryItem(context, data.getCountries().get(i), i));
+            addView(new CountryItem(context, data, i));
         }
     }
 }
