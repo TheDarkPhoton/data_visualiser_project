@@ -121,15 +121,14 @@ public class IndicatorItem extends RelativeLayout {
         lineLayout.addView(line);
     }
 
-    private ArrayList<Pair<String, Double>> getPieChartData(){
-        ArrayList<Pair<String, Double>> data = new ArrayList<>();
+    private ArrayList<Pair<String, Float>> getPieChartData(){
+        ArrayList<Pair<String, Float>> data = new ArrayList<>();
 
         for (PCountry country : _data.getCountries()) {
             PIndicator indicator = country.getIndicator(_indicator.getId());
-            Pair<String, Double> d = new Pair<>(country.getName(), indicator.getAverage());
+            Pair<String, Float> d = new Pair<>(country.getName(), (float)indicator.getAverage());
             data.add(d);
         }
-
         return data;
     }
 
