@@ -3,7 +3,6 @@ package com.darkphoton.data_visualiser_project.data;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
@@ -16,13 +15,13 @@ import java.io.BufferedInputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class JSONDownloader extends AsyncTask<ArrayList<String>, String, Void> {
+public class DataDownloader extends AsyncTask<ArrayList<String>, String, Void> {
     private MainActivity _context;
     private ProgressDialog _progressDialog;
     private Cache _dataCache = new Cache();
     private DataJob _job;
 
-    public JSONDownloader(MainActivity context, DataJob job){
+    public DataDownloader(MainActivity context, DataJob job){
         _context = context;
         _progressDialog = new ProgressDialog(context);
         _job = job;
@@ -34,7 +33,7 @@ public class JSONDownloader extends AsyncTask<ArrayList<String>, String, Void> {
         _progressDialog.show();
         _progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             public void onCancel(DialogInterface arg0) {
-                JSONDownloader.this.cancel(true);
+                DataDownloader.this.cancel(true);
             }
         });
     }

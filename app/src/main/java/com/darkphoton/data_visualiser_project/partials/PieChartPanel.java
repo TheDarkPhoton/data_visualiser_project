@@ -50,7 +50,6 @@ public class PieChartPanel extends PartialPanel {
         pieChart.setHoleRadius(35f);
         pieChart.setHoleColorTransparent(true);
         pieChart.setTransparentCircleRadius(37f);
-        pieChart.setDescription("");
         initColours(20);
 
         addView(pieChart);
@@ -67,10 +66,10 @@ public class PieChartPanel extends PartialPanel {
         }
     }
     
-    public void open(List<Pair<String, Double>> data){
+    public void open(List<Pair<String, Double>> data, String indicatorTitle){
         _closed = false;
 
-        addData(data);
+        addData(data, indicatorTitle);
         pieChart.invalidate();
 
         setY(-size.y);
@@ -92,7 +91,7 @@ public class PieChartPanel extends PartialPanel {
         startAnimation(animation);
     }
 
-    public void addData(List<Pair<String, Double>> pairData){
+    public void addData(List<Pair<String, Double>> pairData, String indicatorTitle){
         ArrayList<Entry> averageIndicater = new ArrayList<>();
         ArrayList<String> country = new ArrayList<>();
 
@@ -106,6 +105,8 @@ public class PieChartPanel extends PartialPanel {
             country.add(countryName);
             averageIndicater.add(new Entry(value, i));
         }
+
+        pieChart.setDescription(indicatorTitle);
 
         // creating PieDataset to hold the values
         PieDataSet dataSet = new PieDataSet(averageIndicater, "");

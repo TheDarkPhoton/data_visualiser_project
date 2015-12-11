@@ -151,10 +151,13 @@ public class IndicatorItem extends RelativeLayout {
     }
 
     private Pair<String, RIndicator> getLineChartData(){
+        if (MainActivity.rowData == null)
+            return null;
+
         RCountry country = MainActivity.rowData.getCountries().get(_country.getId());
         RIndicator indicator = country.getIndicators().get(_indicator.getId());
 
-        return new Pair<>(_country.getName(), indicator);
+        return new Pair<>(_country.getName() + " - " + _indicator.getTitle(), indicator);
     }
 
     private OnClickListener _infoListener = new OnClickListener() {
@@ -175,11 +178,9 @@ public class IndicatorItem extends RelativeLayout {
             Log.i("PIE LISTENER", "Pressed");
             if (MainActivity.activePanel == null) {
                 MainActivity.countries.setEnabled(false);
-                MainActivity.pieChartPanel.open(getPieChartData());
+                MainActivity.pieChartPanel.open(getPieChartData(), _indicator.getTitle());
                 MainActivity.activePanel = MainActivity.pieChartPanel;
             }
-
-
         }
     };
 

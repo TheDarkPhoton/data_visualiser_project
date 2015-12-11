@@ -3,10 +3,12 @@ package com.darkphoton.data_visualiser_project.data.raw;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Stores information on a single data point.
  */
-public class RData {
+public class RData implements Serializable {
     private String _date;                                           //Date of the data point
     private String _decimal;                                        //
     private double _value = 0;                                      //Value of the data point
@@ -18,10 +20,11 @@ public class RData {
      * @param decimal
      * @param value Value of the data point.
      */
-    public RData(String date, String decimal, String value){
+    public RData(String date, String decimal, double value, boolean valid){
         _date = date;
         _decimal = decimal;
-        setValue(value);
+        _value = value;
+        _valid = valid;
     }
 
     /**
@@ -97,5 +100,20 @@ public class RData {
     public boolean equals(Object o) {
         RData d = (RData) o;
         return _date.equals(d.getDate()) && _decimal.equals(d.getDecimal()) && _value == d.getValue();
+    }
+
+    public JSONObject toJSON() throws JSONException {
+        JSONObject json = new JSONObject();
+
+        json.put("date", _date);
+        json.put("decimal", _decimal);
+        json.put("value", _value);
+        json.put("valid", _valid);
+
+        return json;
+    }
+
+    public static RData fromJSON(JSONObject obj) throws JSONException {
+        return new RData(obj.getString("date"), obj.getString("decimal"), obj.getDouble("value"), obj.getBoolean("valid"));
     }
 }

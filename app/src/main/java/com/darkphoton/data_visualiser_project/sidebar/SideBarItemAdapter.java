@@ -20,16 +20,16 @@ import java.util.List;
 
 public class SideBarItemAdapter extends ArrayAdapter<Class> {
     public static HashMap<String, Integer> sliders = new HashMap<>();
-    private boolean[] _checkboxes;
+    public static boolean[] checkboxes;
 
     public SideBarItemAdapter(Context context, int resource, List<Class> items) {
         super(context, resource, items);
-        _checkboxes = new boolean[items.size()];
+        checkboxes = new boolean[items.size()];
 
         try {
             for (Class item : items) {
                 Field id = item.getField("id");
-                sliders.put((String) id.get(null), 0);
+                sliders.put((String) id.get(null), 100);
             }
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
@@ -87,13 +87,14 @@ public class SideBarItemAdapter extends ArrayAdapter<Class> {
         checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                _checkboxes[position] = isChecked;
+                checkboxes[position] = isChecked;
 
                 seekbar.setProgress(100);
-                slider_value.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+
                 if (isChecked) {
                     seeker_layout.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 } else {
+                    seekbar.setProgress(100);
                     params.height = 0;
                 }
                 seeker_layout.requestLayout();
@@ -101,7 +102,7 @@ public class SideBarItemAdapter extends ArrayAdapter<Class> {
         });
 
         seekbar.setProgress(sliders.get(item_id.getText().toString()));
-        checkbox.setChecked(_checkboxes[position]);
+        checkbox.setChecked(checkboxes[position]);
 
         return convertView;
     }

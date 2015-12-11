@@ -1,14 +1,16 @@
 package com.darkphoton.data_visualiser_project.data.raw;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Stores data on a particular world bank topic.
  */
-public class RIndicator {
+public class RIndicator implements Serializable {
     private String _id;                                             //indicator id as defined by world data
     private String _name;                                           //indicator name as defined by world data
     private HashMap<String, RData> _data = new HashMap<>();          //The list of data points in this indicator
@@ -18,9 +20,10 @@ public class RIndicator {
      * @param id The id of the indicator as defined by the world bank.
      * @param name The name of the indicator as defined by the world bank.
      */
-    public RIndicator(String id, String name){
+    public RIndicator(String id, String name, HashMap<String, RData> data){
         _id = id;
         _name = name;
+        _data = data;
     }
 
     /**
@@ -112,5 +115,33 @@ public class RIndicator {
     public boolean equals(Object o) {
         RIndicator i = (RIndicator) o;
         return _id.equals(i.getId()) && _name.equals(i.getName()) && _data.equals(i.getData());
+    }
+
+    public JSONObject toJSON() throws JSONException {
+        JSONObject json = new JSONObject();
+
+        JSONArray data = new JSONArray();
+        for (RData d : _data.values()) {
+            data.put(d.toJSON());
+        }
+
+        json.put("id", _id);
+        json.put("name", _name);
+        json.put("data", data);
+
+        return json;
+    }
+
+    public static RIndicator fromJSON(JSONObject obj) throws JSONException {
+        HashMap<String, RData> data = new HashMap<>();
+
+        JSONArray jsonData = obj.getJSONArray("data");
+        for (int i = 0; i < jsonData.length(); i++) {
+            JSONObject tmp = jsonData.getJSONObject(i);
+            RData d = RData.fromJSON(tmp);
+            data.put(d.getDate(), d);
+        }
+
+        return new RIndicator(obj.getString("id"), obj.getString("name"), data);
     }
 }
