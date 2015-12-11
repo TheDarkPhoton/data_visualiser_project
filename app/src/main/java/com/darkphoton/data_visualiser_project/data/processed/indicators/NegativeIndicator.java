@@ -2,6 +2,7 @@ package com.darkphoton.data_visualiser_project.data.processed.indicators;
 
 import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
 import com.darkphoton.data_visualiser_project.data.raw.RIndicator;
+import com.darkphoton.data_visualiser_project.sidebar.SideBarItemAdapter;
 
 import java.io.Serializable;
 
@@ -15,5 +16,7 @@ public abstract class NegativeIndicator extends PIndicator {
             _normalized = 0;
         else
             _normalized = -( ((-_average) - (-highest)) / ((-highest) - (-lowest)) );
+
+        _normalized *= SideBarItemAdapter.sliders.get(getId()) / 100;
     }
 }
