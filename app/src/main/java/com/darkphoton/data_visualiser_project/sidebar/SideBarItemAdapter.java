@@ -28,7 +28,7 @@ public class SideBarItemAdapter extends ArrayAdapter<Class> {
         try {
             for (Class item : items) {
                 Field id = item.getField("id");
-                sliders.put((String) id.get(null), 0);
+                sliders.put((String) id.get(null), 100);
             }
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
@@ -88,11 +88,10 @@ public class SideBarItemAdapter extends ArrayAdapter<Class> {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 _checkboxes[position] = isChecked;
 
-                seekbar.setProgress(100);
-
                 if (isChecked) {
                     seeker_layout.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 } else {
+                    seekbar.setProgress(100);
                     params.height = 0;
                 }
                 seeker_layout.requestLayout();
