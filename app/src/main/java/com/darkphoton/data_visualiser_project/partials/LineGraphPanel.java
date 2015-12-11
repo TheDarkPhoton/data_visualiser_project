@@ -82,7 +82,7 @@ public class LineGraphPanel extends PartialPanel {
         lineChart.setDescription("");
         lineChart.setNoDataTextDescription("This indicator does not have any valid data");
         lineChart.setTouchEnabled(false);
-        lineChart.setDragEnabled(false);
+        lineChart.setDragEnabled(true);
         lineChart.setScaleEnabled(true);
         lineChart.setDrawGridBackground(false);
         lineChart.setPinchZoom(true);
@@ -95,6 +95,7 @@ public class LineGraphPanel extends PartialPanel {
         Legend legend = lineChart.getLegend();
         legend.setForm(Legend.LegendForm.LINE);
         legend.setTextColor(Color.LTGRAY);
+        legend.setTextSize(15f);
 
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setTextColor(Color.BLACK);
@@ -138,7 +139,7 @@ public class LineGraphPanel extends PartialPanel {
     public void setDataValues(Pair<String, RIndicator> rData){
 
         RIndicator indicator = rData.second;
-        indicName =  "";
+        indicName =  indicator.getName();
 
         ArrayList<RData> tempData = new ArrayList<>(indicator.getData().values());
         Collections.sort(tempData, new Comparator<RData>() {
