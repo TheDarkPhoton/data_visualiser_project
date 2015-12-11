@@ -40,7 +40,7 @@ public class LineGraphPanel extends PartialPanel {
     private ArrayList<Entry> yVals;
     private ArrayList<String> xVals;
 
-    private String indicName;
+//    private String indicName;
 
     public LineGraphPanel(Context context) {
         super(context);
@@ -141,7 +141,6 @@ public class LineGraphPanel extends PartialPanel {
 
         if (rData != null){
             RIndicator indicator = rData.second;
-            indicName =  indicator.getName();
             lineChart.setDescription(rData.first);
 
             ArrayList<RData> tempData = new ArrayList<>(indicator.getData().values());
@@ -164,7 +163,7 @@ public class LineGraphPanel extends PartialPanel {
             lineChart.setDescription("");
         }
 
-        LineDataSet set1 = new LineDataSet(yVals, indicName);
+        LineDataSet set1 = new LineDataSet(yVals, "");
         set1.setDrawCubic(true);
         set1.setCubicIntensity(0.2f);
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
