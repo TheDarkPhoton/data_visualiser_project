@@ -10,7 +10,8 @@ import android.widget.TextView;
 
 import com.darkphoton.data_visualiser_project.MainActivity;
 import com.darkphoton.data_visualiser_project.R;
-import com.darkphoton.data_visualiser_project.data.JSONDownloader;
+import com.darkphoton.data_visualiser_project.data.DataDownloader;
+import com.darkphoton.data_visualiser_project.data.DataLoader;
 import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
 
 import java.util.ArrayList;
@@ -82,9 +83,7 @@ public class SideBarDrawer implements DrawerLayout.DrawerListener {
             }
         }
 
-
-
-        if (_context.hasActiveInternetConnection()){
+        if (_context.hasActiveInternetConnection() && MainActivity.rowData.isOutdated()){
             doOnline(ids);
         } else {
             doOffline(ids);
@@ -97,7 +96,10 @@ public class SideBarDrawer implements DrawerLayout.DrawerListener {
     }
 
     private void doOffline(ArrayList<String> ids) {
-        _context.offlineJob.run(MainActivity.rowData.subsetByIndicator(ids));
+        if (ids.size() > 0) {
+            DataLoader l = new DataLoader(_context, _context.offlineJob);
+            l.execute(ids);
+        }
     }
 
     private void doOnline(ArrayList<String> ids) {
@@ -108,7 +110,7 @@ public class SideBarDrawer implements DrawerLayout.DrawerListener {
         }
 
         if (urls.size() > 0) {
-            JSONDownloader d = new JSONDownloader(_context, _context.onlineJob);
+            DataDownloader d = new DataDownloader(_context, _context.onlineJob);
             d.execute(urls);
         }
     }

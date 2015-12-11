@@ -137,7 +137,8 @@ public class RIndicator implements Serializable {
 
         JSONArray jsonData = obj.getJSONArray("data");
         for (int i = 0; i < jsonData.length(); i++) {
-            RData d = RData.fromJSON(jsonData.getJSONObject(i));
+            JSONObject tmp = jsonData.getJSONObject(i);
+            RData d = RData.fromJSON(tmp);
             data.put(d.getDate(), d);
         }
 

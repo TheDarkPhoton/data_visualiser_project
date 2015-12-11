@@ -182,7 +182,7 @@ public class Cache implements Serializable {
         Log.i("CACHE", "Caching completed " + _cache_age.toString());
     }
 
-    public boolean IsOutdated(){
+    public boolean isOutdated(){
         Date current_date = new Date();
         long month = (30L * 604800000L);
         return _cache_age == null || _cache_age.getTime() < current_date.getTime() - month;

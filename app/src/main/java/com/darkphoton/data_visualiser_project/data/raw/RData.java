@@ -20,7 +20,7 @@ public class RData implements Serializable {
      * @param decimal
      * @param value Value of the data point.
      */
-    public RData(String date, String decimal, int value, boolean valid){
+    public RData(String date, String decimal, double value, boolean valid){
         _date = date;
         _decimal = decimal;
         _value = value;
@@ -114,6 +114,6 @@ public class RData implements Serializable {
     }
 
     public static RData fromJSON(JSONObject obj) throws JSONException {
-        return new RData(obj.getString("date"), obj.getString("decimal"), obj.getInt("value"), obj.getBoolean("valid"));
+        return new RData(obj.getString("date"), obj.getString("decimal"), obj.getDouble("value"), obj.getBoolean("valid"));
     }
 }

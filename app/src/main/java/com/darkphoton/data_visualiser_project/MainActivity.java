@@ -16,8 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.darkphoton.data_visualiser_project.data.DataJob;
 import com.darkphoton.data_visualiser_project.data.Processor;
@@ -34,13 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.URL;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     public static Point screen_size = new Point();
@@ -184,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
             countries.addView(new CountryList(this, data));
         }
 
-        if (hasActiveInternetConnection() && MainActivity.rowData.IsOutdated()){
+        if (hasActiveInternetConnection() && MainActivity.rowData.isOutdated()){
             _backgroundDownloader.start();
         } else if (MainActivity.rowData.getCountries().size() == 0) {
             final AlertDialog.Builder alert  = new AlertDialog.Builder(this);
