@@ -55,10 +55,24 @@ public class MainActivity extends AppCompatActivity {
 
     private Processor data;
 
-    public DataJob jsonJob = new DataJob() {
+    public DataJob onlineJob = new DataJob() {
         @Override
         public void run(Cache cache) {
             rowData.updateDataCache(cache.getCountries());
+            data = new Processor(cache);
+            data.normalize();
+            data.reduceToTop(20);
+
+            Processor.serialize(MainActivity.this, data);
+
+            countries.removeAllViews();
+            countries.addView(new CountryList(MainActivity.this, data));
+        }
+    };
+
+    public DataJob offlineJob = new DataJob() {
+        @Override
+        public void run(Cache cache) {
             data = new Processor(cache);
             data.normalize();
             data.reduceToTop(20);

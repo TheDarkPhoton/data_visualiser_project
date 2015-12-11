@@ -15,6 +15,11 @@ public class RCountry implements Serializable {
     private String _name;                                                       //The name given by the world bank
     private HashMap<String, RIndicator> _indicators = new HashMap<>();           //The list of indicators stored for this country
 
+    public RCountry(RCountry country){
+        _id = country.getId();
+        _name = country.getName();
+    }
+
     /**
      * Defines country with default parameters.
      * @param id is a unique identifier given by the world bank.
@@ -39,6 +44,10 @@ public class RCountry implements Serializable {
 
         RIndicator indicator = new RIndicator(data_unit);
 
+        _indicators.put(indicator.getId(), indicator);
+    }
+
+    public void addIndicator(RIndicator indicator){
         _indicators.put(indicator.getId(), indicator);
     }
 

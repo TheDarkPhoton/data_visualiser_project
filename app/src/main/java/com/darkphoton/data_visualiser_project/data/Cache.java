@@ -17,6 +17,7 @@ import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -91,6 +92,10 @@ public class Cache implements Serializable {
         }
     }
 
+    public void addCountry(RCountry country){
+        _countries.put(country.getId(), country);
+    }
+
     /**
      * Gets the list of countries.
      * @return Hash map of all countries.
@@ -152,6 +157,24 @@ public class Cache implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Cache subsetByIndicator(ArrayList<String> ids){
+        Cache newCache = new Cache();
+
+        for (RCountry country : _countries.values()) {
+            RCountry newCountry = new RCountry(country);
+
+            for (String id : ids) {
+                RIndicator indicator = country.getIndicators().get(id);
+                if (indicator != null)
+                    newCountry.addIndicator(indicator);
+            }
+
+            newCache.addCountry(newCountry);
+        }
+
+        return newCache;
     }
 
     public void cachingCompleted(){

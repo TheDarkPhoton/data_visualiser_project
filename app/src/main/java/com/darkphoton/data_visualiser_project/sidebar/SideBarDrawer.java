@@ -63,7 +63,7 @@ public class SideBarDrawer implements DrawerLayout.DrawerListener {
         final int firstItemPosition = _listView.getFirstVisiblePosition();
         final int lastItemPosition = firstItemPosition + _listView.getChildCount() - 1;
 
-        ArrayList<String> urls = new ArrayList<>();
+        ArrayList<String> ids = new ArrayList<>();
 
         for (int i = 0; i < _listView.getCount(); i++) {
             LinearLayout item;
@@ -76,19 +76,40 @@ public class SideBarDrawer implements DrawerLayout.DrawerListener {
             }
 
             CheckBox checkbox = (CheckBox) ((RelativeLayout) item.getChildAt(0)).getChildAt(1);
+            //adds the id of selected indicator
             if (checkbox.isChecked()){
-                urls.add("http://api.worldbank.org/countries/indicators/" + ((TextView) ((RelativeLayout) item.getChildAt(0)).getChildAt(0)).getText().toString() + "?date=2010:2015&format=json&per_page=10000");
+                ids.add(((TextView) ((RelativeLayout) item.getChildAt(0)).getChildAt(0)).getText().toString());
             }
         }
 
-        if (urls.size() > 0) {
-            JSONDownloader d = new JSONDownloader(_context, _context.jsonJob);
-            d.execute(urls);
+
+
+        if (_context.hasActiveInternetConnection()){
+            doOnline(ids);
+        } else {
+            doOffline(ids);
         }
     }
 
     @Override
     public void onDrawerStateChanged(int newState) {
 
+    }
+
+    private void doOffline(ArrayList<String> ids) {
+        _context.offlineJob.run(MainActivity.rowData.subsetByIndicator(ids));
+    }
+
+    private void doOnline(ArrayList<String> ids) {
+        ArrayList<String> urls = new ArrayList<>();
+
+        for (String id : ids) {
+            urls.add("http://api.worldbank.org/countries/indicators/" + id + "?date=2010:2015&format=json&per_page=10000");
+        }
+
+        if (urls.size() > 0) {
+            JSONDownloader d = new JSONDownloader(_context, _context.onlineJob);
+            d.execute(urls);
+        }
     }
 }
