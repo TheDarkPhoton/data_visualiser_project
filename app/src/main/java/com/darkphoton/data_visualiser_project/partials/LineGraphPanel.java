@@ -79,7 +79,6 @@ public class LineGraphPanel extends PartialPanel {
 //        relativeLayout.addView(yAxisLabel, relativeParams2);
 
         lineChart.animateXY(7000, 500);
-        lineChart.setDescription("");
         lineChart.setNoDataTextDescription("This indicator does not have any valid data");
         lineChart.setTouchEnabled(false);
         lineChart.setDragEnabled(false);
@@ -136,27 +135,31 @@ public class LineGraphPanel extends PartialPanel {
     }
 
     public void setDataValues(Pair<String, RIndicator> rData){
-
-        RIndicator indicator = rData.second;
-        indicName =  "";
-
-        ArrayList<RData> tempData = new ArrayList<>(indicator.getData().values());
-        Collections.sort(tempData, new Comparator<RData>() {
-            @Override
-            public int compare(RData lhs, RData rhs) {
-                return lhs.getDate().compareTo(rhs.getDate());
-            }
-        });
-
         xVals = new ArrayList<>();
         yVals = new ArrayList<>();
-        for (int i = 0; i < tempData.size(); i++) {
-            RData d = tempData.get(i);
-            if (!d.isValid())
-                continue;
 
-            xVals.add(d.getDate());
-            yVals.add(new Entry((float) d.getValue(), i));
+        if (rData != null){
+            RIndicator indicator = rData.second;
+            lineChart.setDescription(rData.first);
+
+            ArrayList<RData> tempData = new ArrayList<>(indicator.getData().values());
+            Collections.sort(tempData, new Comparator<RData>() {
+                @Override
+                public int compare(RData lhs, RData rhs) {
+                    return lhs.getDate().compareTo(rhs.getDate());
+                }
+            });
+
+            for (int i = 0; i < tempData.size(); i++) {
+                RData d = tempData.get(i);
+                if (!d.isValid())
+                    continue;
+
+                xVals.add(d.getDate());
+                yVals.add(new Entry((float) d.getValue(), i));
+            }
+        } else {
+            lineChart.setDescription("");
         }
 
         LineDataSet set1 = new LineDataSet(yVals, indicName);

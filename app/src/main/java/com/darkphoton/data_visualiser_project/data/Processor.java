@@ -82,7 +82,7 @@ public class Processor implements Serializable {
         return _countries;
     }
 
-    public static Processor deSerialize(Context context){
+    public static Processor deserialize(Context context){
         Processor processor = null;
         try {
             FileInputStream fis = context.openFileInput("processed_data.dat");

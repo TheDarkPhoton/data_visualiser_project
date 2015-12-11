@@ -1,19 +1,28 @@
 package com.darkphoton.data_visualiser_project;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Point;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.darkphoton.data_visualiser_project.data.DataJob;
 import com.darkphoton.data_visualiser_project.data.Processor;
 import com.darkphoton.data_visualiser_project.data.Cache;
+import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
 import com.darkphoton.data_visualiser_project.partials.CountryList;
 import com.darkphoton.data_visualiser_project.partials.InfoPartial;
 import com.darkphoton.data_visualiser_project.partials.LineGraphPanel;
@@ -21,11 +30,16 @@ import com.darkphoton.data_visualiser_project.partials.PartialPanel;
 import com.darkphoton.data_visualiser_project.partials.PieChartPanel;
 import com.darkphoton.data_visualiser_project.sidebar.SideBarDrawer;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     public static LineGraphPanel lineGraphPanel;
     public static PartialPanel activePanel = null;
     public static HorizontalScrollView countries;
-    public static Cache rowData;
+    public static Cache rowData = new Cache();
 
     private SideBarDrawer sideBar;
 
@@ -44,16 +58,82 @@ public class MainActivity extends AppCompatActivity {
     public DataJob jsonJob = new DataJob() {
         @Override
         public void run(Cache cache) {
-            rowData = cache;
+            rowData.updateDataCache(cache.getCountries());
             data = new Processor(cache);
             data.normalize();
             data.reduceToTop(20);
+
             Processor.serialize(MainActivity.this, data);
 
             countries.removeAllViews();
             countries.addView(new CountryList(MainActivity.this, data));
         }
     };
+
+    private Thread _backgroundDownloader = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            Cache tempCache = new Cache();
+            try {
+                for (String id : PIndicator.indicatorClasses.keySet()) {
+                    Cache cache = new Cache();
+                    String pageUrl = "http://api.worldbank.org/countries/indicators/" + id + "?date=2010:2015&format=json&per_page=10000";
+
+                    JSONArray json = null;
+                    do {
+                        String path;
+                        if (json == null)
+                            path = pageUrl + "&page=1";
+                        else
+                            path = pageUrl + "&page=" + (json.getJSONObject(0).getInt("page") + 1);
+
+                        StringBuilder stringBuilder = new StringBuilder();
+                        URL data = new URL(path);
+                        BufferedInputStream bis = new BufferedInputStream(data.openStream());
+
+                        byte[] buffer = new byte[1024];
+                        int bytesRead;
+                        while((bytesRead = bis.read(buffer)) > 0) {
+                            String text = new String(buffer, 0, bytesRead);
+                            stringBuilder.append(text);
+                        }
+                        bis.close();
+
+                        json = new JSONArray(stringBuilder.toString());
+                        JSONArray indicators = json.getJSONArray(1);
+                        for (int i = 0; i < indicators.length(); i++) {
+                            cache.updateDataCache(indicators.getJSONObject(i));
+                        }
+                    } while (json.getJSONObject(0).getInt("page") < json.getJSONObject(0).getInt("pages"));
+
+                    tempCache.updateDataCache(cache.getCountries());
+                    Log.i("CACHE", "Loaded indicator " + id);
+                }
+            } catch (java.io.IOException | JSONException e) {
+                e.printStackTrace();
+                Log.i("CACHE", "Error");
+                return;
+            }
+
+            tempCache.cachingCompleted();
+            Cache.serialize(MainActivity.this, tempCache);
+            MainActivity.rowData = tempCache;
+            Log.i("CACHE", "Finished");
+
+            Handler h = new Handler(MainActivity.this.getMainLooper());
+            h.post(new Runnable() {
+                @Override
+                public void run() {
+                    final AlertDialog.Builder alert  = new AlertDialog.Builder(MainActivity.this);
+                    alert.setMessage("You can now use this application offline.");
+                    alert.setTitle("Data Caching Completed");
+                    alert.setPositiveButton("Ok", null);
+                    alert.setCancelable(true);
+                    alert.create().show();
+                }
+            });
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
         countries = (HorizontalScrollView) findViewById(R.id.country_list);
         countries.addView(new CountryList(this));
-        int index = ((ViewGroup) countries.getParent()).indexOfChild(countries) + 1;
 
-//        ViewGroup drawer = (ViewGroup) findViewById(R.id.drawer_layout);
         ViewGroup drawer = (ViewGroup) findViewById(android.R.id.content);
         infoPanel = new InfoPartial(this);
         drawer.addView(infoPanel);
@@ -82,60 +160,50 @@ public class MainActivity extends AppCompatActivity {
 
         sideBar = new SideBarDrawer(this);
 
-//        data = Processor.deSerialize(this);
-//        if (data != null) {
-//            countries.removeAllViews();
-//            countries.addView(new CountryList(this, data));
-//        }
-    }
+        Cache tmpCache = Cache.deserialize(this);
+        if (tmpCache != null)
+            MainActivity.rowData = tmpCache;
 
-    /*This method will serialize the given object with the given filename in the /files directory
-    * as a .ser file. You do not need to add any extensions to the filename.*/
-    public void serialize(Object object, String filename){
-        try{
-            Context context = getBaseContext();
-            FileOutputStream fileOutput = context.openFileOutput(filename+".ser", Context.MODE_PRIVATE);
-            ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
-            objectOutput.writeObject(object);
-            objectOutput.close();
-            fileOutput.close();
-        }catch (IOException i){
-            i.printStackTrace();
+        data = Processor.deserialize(this);
+        if (data != null) {
+            countries.removeAllViews();
+            countries.addView(new CountryList(this, data));
+        }
+
+        if (hasActiveInternetConnection() && MainActivity.rowData.IsOutdated()){
+            _backgroundDownloader.start();
+        } else if (MainActivity.rowData.getCountries().size() == 0) {
+            final AlertDialog.Builder alert  = new AlertDialog.Builder(this);
+            alert.setMessage("You must have internet access the first time you are using this application.");
+            alert.setTitle("Error No Internet Access");
+            alert.setPositiveButton("Quit",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            MainActivity.this.finishAffinity();
+                        }
+                    });
+            alert.setCancelable(true);
+            alert.create().show();
         }
     }
 
-    /*This method will deserialize the object with the given filename. You do not need to specify the
-    * file extension, the files are assumed to be .ser and in the /files directory, as if
-    * created with the serialize() method. The deserialized object is returned. */
-    public Object deserialize(String filename){
-        Object object = null;
-        try {
-            FileInputStream fileInput = openFileInput(filename + ".ser");
-            ObjectInputStream objectInput = new ObjectInputStream(fileInput);
-            object = objectInput.readObject();
-            objectInput.close();
-            fileInput.close();
-        }catch (IOException i){
-            i.printStackTrace();
-        }catch (ClassNotFoundException c){
-            System.out.println(filename+" serialized object not found");
-            c.printStackTrace();
+    public boolean hasActiveInternetConnection() {
+        if (isNetworkAvailable()) {
+            try {
+                Process p1 = java.lang.Runtime.getRuntime().exec("ping -c 1    www.google.com");
+                int returnVal = p1.waitFor();
+                return ( returnVal == 0 );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        return object;
+        return false;
     }
 
-    /*This method is used for normalizing the percentages from the Education data indicators as all of
-    * them are given in a percentage format. It takes an ArrayList of percentages given as Strings and
-    * returns a single percentage as a String. All but one have been given as "% of GDP per Capita"
-    * except for "Government expenditure on education" which is given as "% of GDP". While this could
-    * be converted to "% of GDP per Capita" it seems somewhat redundant because the data indicators
-     * range dramatically, from 23% to as much as 297%*/
-    public static String normalizePercentages(ArrayList<String> inputArray){
-        int sum = 0;
-        for(String s: inputArray){
-            sum+=Integer.parseInt(s);
-        }
-        return sum/inputArray.size()+"%";
+    private boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = manager.getActiveNetworkInfo();
+        return info != null;
     }
 
     @Override

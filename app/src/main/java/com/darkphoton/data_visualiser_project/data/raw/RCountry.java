@@ -1,14 +1,16 @@
 package com.darkphoton.data_visualiser_project.data.raw;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Stores world bank data of the country, this includes indicates and those include actual data.
  */
-public class RCountry {
+public class RCountry implements Serializable {
     private String _id;                                                         //The id given by the world bank
     private String _name;                                                       //The name given by the world bank
     private HashMap<String, RIndicator> _indicators = new HashMap<>();           //The list of indicators stored for this country
@@ -18,9 +20,10 @@ public class RCountry {
      * @param id is a unique identifier given by the world bank.
      * @param name is the name of the country given by the world bank.
      */
-    public RCountry(String id, String name) {
+    public RCountry(String id, String name, HashMap<String, RIndicator> indicators) {
         _id = id;
         _name = name;
+        _indicators = indicators;
     }
 
     /**
@@ -112,5 +115,32 @@ public class RCountry {
     public boolean equals(Object o) {
         RCountry c = (RCountry) o;
         return _id.equals(c.getId()) && _name.equals(c.getName()) && _indicators.equals(c.getIndicators());
+    }
+
+    public JSONObject toJSON() throws JSONException {
+        JSONObject json = new JSONObject();
+
+        JSONArray data = new JSONArray();
+        for (RIndicator i : _indicators.values()) {
+            data.put(i.toJSON());
+        }
+
+        json.put("id", _id);
+        json.put("name", _name);
+        json.put("indicators", data);
+
+        return json;
+    }
+
+    public static RCountry fromJSON(JSONObject obj) throws JSONException {
+        HashMap<String, RIndicator> indicators = new HashMap<>();
+
+        JSONArray jsonData = obj.getJSONArray("indicators");
+        for (int i = 0; i < jsonData.length(); i++) {
+            RIndicator indicator = RIndicator.fromJSON(jsonData.getJSONObject(i));
+            indicators.put(indicator.getId(), indicator);
+        }
+
+        return new RCountry(obj.getString("id"), obj.getString("name"), indicators);
     }
 }
