@@ -1,6 +1,7 @@
 package com.darkphoton.data_visualiser_project.sidebar;
 
 import android.content.Context;
+import android.util.TypedValue;
 import android.widget.ArrayAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,7 +90,7 @@ public class SideBarItemAdapter extends ArrayAdapter<Class> {
                 _checkboxes[position] = isChecked;
 
                 seekbar.setProgress(100);
-
+                slider_value.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
                 if (isChecked) {
                     seeker_layout.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 } else {
