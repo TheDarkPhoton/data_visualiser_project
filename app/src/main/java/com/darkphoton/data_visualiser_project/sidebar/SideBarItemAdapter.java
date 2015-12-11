@@ -19,11 +19,11 @@ import java.util.List;
 
 public class SideBarItemAdapter extends ArrayAdapter<Class> {
     public static HashMap<String, Integer> sliders = new HashMap<>();
-    private boolean[] _checkboxes;
+    public static boolean[] checkboxes;
 
     public SideBarItemAdapter(Context context, int resource, List<Class> items) {
         super(context, resource, items);
-        _checkboxes = new boolean[items.size()];
+        checkboxes = new boolean[items.size()];
 
         try {
             for (Class item : items) {
@@ -86,7 +86,7 @@ public class SideBarItemAdapter extends ArrayAdapter<Class> {
         checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                _checkboxes[position] = isChecked;
+                checkboxes[position] = isChecked;
 
                 if (isChecked) {
                     seeker_layout.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -99,7 +99,7 @@ public class SideBarItemAdapter extends ArrayAdapter<Class> {
         });
 
         seekbar.setProgress(sliders.get(item_id.getText().toString()));
-        checkbox.setChecked(_checkboxes[position]);
+        checkbox.setChecked(checkboxes[position]);
 
         return convertView;
     }

@@ -14,6 +14,8 @@ import com.darkphoton.data_visualiser_project.data.JSONDownloader;
 import com.darkphoton.data_visualiser_project.data.processed.PIndicator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class SideBarDrawer implements DrawerLayout.DrawerListener {
@@ -21,13 +23,13 @@ public class SideBarDrawer implements DrawerLayout.DrawerListener {
     private DrawerLayout _drawer;
     private ListView _listView;
 
+    public HashMap<String, Integer> _sliders = new HashMap<>();
+    public boolean[] _checkboxes;
+
     public SideBarDrawer(MainActivity context){
         _context = context;
 
         _listView = (ListView) context.findViewById(R.id.side_list);
-
-//        SideBarAdapter groupAdapter = new SideBarAdapter(context, android.R.layout.simple_list_item_1, PIndicator.indicatorGroups);
-//        _listView.setAdapter(groupAdapter);
 
         List<Class> set = new ArrayList<>(PIndicator.indicatorClasses.values());
         SideBarItemAdapter indicatorAdapter = new SideBarItemAdapter(_context, android.R.layout.simple_list_item_1, set);
@@ -35,6 +37,9 @@ public class SideBarDrawer implements DrawerLayout.DrawerListener {
 
         _drawer = (DrawerLayout) context.findViewById(R.id.drawer_layout);
         _drawer.setDrawerListener(this);
+
+        _sliders = (HashMap<String, Integer>)SideBarItemAdapter.sliders.clone();
+        _checkboxes = SideBarItemAdapter.checkboxes.clone();
     }
 
     @Override
@@ -49,6 +54,12 @@ public class SideBarDrawer implements DrawerLayout.DrawerListener {
 
     @Override
     public void onDrawerClosed(View drawerView) {
+        if (_sliders.equals(SideBarItemAdapter.sliders) && Arrays.equals(_checkboxes, SideBarItemAdapter.checkboxes))
+            return;
+
+        _sliders = (HashMap<String, Integer>)SideBarItemAdapter.sliders.clone();
+        _checkboxes = SideBarItemAdapter.checkboxes.clone();
+
         final int firstItemPosition = _listView.getFirstVisiblePosition();
         final int lastItemPosition = firstItemPosition + _listView.getChildCount() - 1;
 
